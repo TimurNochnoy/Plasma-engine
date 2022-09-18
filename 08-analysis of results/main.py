@@ -281,7 +281,7 @@ for i in range(1, I_max_main + 1):
 
 # enter the time layer for which you want to display the values
 N = N_max_main
-
+'''
 # animation of the establishment of a stationary regime of plasma flow in the channel
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_0_main, a_main, b_main)
@@ -358,7 +358,7 @@ for n in range(0, N_max_main + 1, 5):
 ani = animation.ArtistAnimation(fig, images, interval=1, repeat_delay=100)
 ani.save("01 - establishment of strength.gif", writer='pillow')
 
-'''
+
 # checking that the velocities intersect at the center
 
 plt.title('Alfven and fast magnetosonic velocity')
@@ -377,7 +377,7 @@ plt.plot(x_lst, y_lst, label='fast magnetosonic velocity')
 plt.grid()
 plt.legend()
 plt.show()
-
+'''
 # geometry of channel
 
 plt.title('Geometry of channel')
@@ -397,8 +397,9 @@ for i in range(I_max_main + 1):
 plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
 
 plt.grid()
+plt.legend()
 plt.show()
-
+'''
 # FOR VARIATION OF BETA
 
 # for rho
