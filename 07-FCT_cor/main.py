@@ -281,11 +281,11 @@ n = N_max
 for i in range(I_max + 1):
     y_lst[i] = u_cor_1[n, i] / S_mesh[i]
 
-plt.title('Last time layer for rho')
+plt.title('Plasma density')
 plt.xlabel('channel length coordinate')
 plt.ylabel('rho value')
 plt.grid()
-plt.plot(x_lst, y_lst)
+plt.plot(x_lst, y_lst, 'g')
 plt.show()
 
 # for v
@@ -293,11 +293,11 @@ plt.show()
 for i in range(I_max + 1):
     y_lst[i] = u_cor_2[n, i] / u_cor_1[n, i]
 
-plt.title('Last time layer for velocity')
+plt.title('Plasma velocity')
 plt.xlabel('channel length coordinate')
 plt.ylabel('velocity value')
 plt.grid()
-plt.plot(x_lst, y_lst)
+plt.plot(x_lst, y_lst, 'b')
 plt.show()
 
 # for energy
@@ -305,11 +305,11 @@ plt.show()
 for i in range(I_max + 1):
     y_lst[i] = u_cor_3[n, i] / u_cor_1[n, i]
 
-plt.title('Last time layer for energy')
+plt.title('Plasma energy')
 plt.xlabel('channel length coordinate')
 plt.ylabel('energy value')
 plt.grid()
-plt.plot(x_lst, y_lst)
+plt.plot(x_lst, y_lst, 'r')
 plt.show()
 
 # for strength
@@ -317,9 +317,9 @@ plt.show()
 for i in range(I_max + 1):
     y_lst[i] = u_cor_4[n, i] / S_mesh[i]
 
-plt.title('Last time layer for strength')
+plt.title('Azimuthal magnetic field')
 plt.xlabel('channel length coordinate')
 plt.ylabel('strength H_phi value')
 plt.grid()
-plt.plot(x_lst, y_lst)
+plt.plot(x_lst, y_lst, 'y')
 plt.show()
