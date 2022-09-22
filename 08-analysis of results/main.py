@@ -281,7 +281,7 @@ for i in range(1, I_max_main + 1):
 
 # enter the time layer for which you want to display the values
 N = N_max_main
-'''
+
 # animation of the establishment of a stationary regime of plasma flow in the channel
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_0_main, a_main, b_main)
@@ -292,17 +292,17 @@ fig = plt.figure()
 images = []
 
 for n in range(0, N_max_main + 1, 5):
-    plt.title('Establishment of a stationary regime for rho')
+    plt.title('Plasma density')
     plt.xlabel('channel length coordinate')
     plt.ylabel('rho value')
     for i in range(I_max_main + 1):
         y_lst[i] = u_cor_1[n, i] / S_mesh[i]
-    image = plt.plot(x_lst, y_lst, 'b')
+    image = plt.plot(x_lst, y_lst, 'g')
     plt.grid()
     images.append(image)
 
 ani = animation.ArtistAnimation(fig, images, interval=1, repeat_delay=100)
-ani.save("01 - establishment of rho.gif", writer='pillow')
+ani.save("02 - establishment of rho.gif", writer='pillow')
 
 # for velocity
 
@@ -310,7 +310,7 @@ fig = plt.figure()
 images = []
 
 for n in range(0, N_max_main + 1, 5):
-    plt.title('Establishment of a stationary regime for velocity')
+    plt.title('Plasma velocity')
     plt.xlabel('channel length coordinate')
     plt.ylabel('velocity value')
     for i in range(I_max_main + 1):
@@ -320,7 +320,7 @@ for n in range(0, N_max_main + 1, 5):
     images.append(image)
 
 ani = animation.ArtistAnimation(fig, images, interval=1, repeat_delay=100)
-ani.save("01 - establishment of velocity.gif", writer='pillow')
+ani.save("02 - establishment of velocity.gif", writer='pillow')
 
 # for energy
 
@@ -328,17 +328,17 @@ fig = plt.figure()
 images = []
 
 for n in range(0, N_max_main + 1, 5):
-    plt.title('Establishment of a stationary regime for energy')
+    plt.title('Plasma energy')
     plt.xlabel('channel length coordinate')
     plt.ylabel('energy value')
     for i in range(I_max_main + 1):
         y_lst[i] = u_cor_3[n, i] / u_cor_1[n, i]
-    image = plt.plot(x_lst, y_lst, 'b')
+    image = plt.plot(x_lst, y_lst, 'r')
     plt.grid()
     images.append(image)
 
 ani = animation.ArtistAnimation(fig, images, interval=1, repeat_delay=100)
-ani.save("01 - establishment of energy.gif", writer='pillow')
+ani.save("02 - establishment of energy.gif", writer='pillow')
 
 # for strength
 
@@ -346,38 +346,37 @@ fig = plt.figure()
 images = []
 
 for n in range(0, N_max_main + 1, 5):
-    plt.title('Establishment of a stationary regime for strength')
+    plt.title('Azimuthal magnetic field')
     plt.xlabel('channel length coordinate')
     plt.ylabel('strength value')
     for i in range(I_max_main + 1):
         y_lst[i] = u_cor_4[n, i] / S_mesh[i]
-    image = plt.plot(x_lst, y_lst, 'b')
+    image = plt.plot(x_lst, y_lst, 'y')
     plt.grid()
     images.append(image)
 
 ani = animation.ArtistAnimation(fig, images, interval=1, repeat_delay=100)
-ani.save("01 - establishment of strength.gif", writer='pillow')
-
-
+ani.save("02 - establishment of strength.gif", writer='pillow')
+'''
 # checking that the velocities intersect at the center
 
-plt.title('Alfven and fast magnetosonic velocity')
+plt.title('Plasma and fast magnetosonic velocity')
 plt.xlabel('channel length coordinate')
 plt.ylabel('velocity value')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_0_main, a_main, b_main)
 for i in range(I_max_main + 1):
     y_lst[i] = u_cor_2[N, i] / u_cor_1[N, i]
-plt.plot(x_lst, y_lst, label='Alfven velocity')
+plt.plot(x_lst, y_lst, label='Plasma velocity')
 
 for i in range(I_max_main + 1):
     y_lst[i] = np.sqrt(H_phi_mesh[i] ** 2 / rho_mesh[i] + gamma_main * p_mesh[i] / rho_mesh[i])
-plt.plot(x_lst, y_lst, label='fast magnetosonic velocity')
+plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 
 plt.grid()
 plt.legend()
 plt.show()
-'''
+
 # geometry of channel
 
 plt.title('Geometry of channel')
@@ -399,12 +398,12 @@ plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
 plt.grid()
 plt.legend()
 plt.show()
-'''
+
 # FOR VARIATION OF BETA
 
 # for rho
 
-plt.title('Variation of rho depending on beta')
+plt.title('Plasma density')
 plt.xlabel('channel length coordinate')
 plt.ylabel('rho value')
 plt.grid()
@@ -434,7 +433,7 @@ plt.show()
 
 # for v
 
-plt.title('Variation of velocity depending on beta')
+plt.title('Plasma velocity')
 plt.xlabel('channel length coordinate')
 plt.ylabel('velocity value')
 plt.grid()
@@ -464,7 +463,7 @@ plt.show()
 
 # for energy
 
-plt.title('Variation of energy depending on beta')
+plt.title('Plasma energy')
 plt.xlabel('channel length coordinate')
 plt.ylabel('energy value')
 plt.grid()
@@ -494,7 +493,7 @@ plt.show()
 
 # for strength
 
-plt.title('Variation of strength depending on beta')
+plt.title('Azimuthal magnetic field')
 plt.xlabel('channel length coordinate')
 plt.ylabel('strength value')
 plt.grid()
@@ -526,7 +525,7 @@ plt.show()
 
 # for rho
 
-plt.title('Variation of rho depending on geometry')
+plt.title('Plasma density')
 plt.xlabel('channel length coordinate')
 plt.ylabel('rho value')
 plt.grid()
@@ -551,7 +550,7 @@ plt.show()
 
 # for v
 
-plt.title('Variation of velocity depending on geometry')
+plt.title('Plasma velocity')
 plt.xlabel('channel length coordinate')
 plt.ylabel('velocity value')
 plt.grid()
@@ -576,7 +575,7 @@ plt.show()
 
 # for energy
 
-plt.title('Variation of energy depending on geometry')
+plt.title('Plasma energy')
 plt.xlabel('channel length coordinate')
 plt.ylabel('energy value')
 plt.grid()
@@ -601,7 +600,7 @@ plt.show()
 
 # for strength
 
-plt.title('Variation of strength depending on geometry')
+plt.title('Azimuthal magnetic field')
 plt.xlabel('channel length coordinate')
 plt.ylabel('strength value')
 plt.grid()
