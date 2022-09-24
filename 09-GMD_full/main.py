@@ -97,6 +97,7 @@ for i in range(I_max + 1):
     e_mesh[i] = e_0
     p_mesh[i] = p_0
     H_phi_mesh[i] = 1 - 0.9 * i * h
+    H_z_mesh[i] = 0.1
     S_mesh[i] = 2 * (i * h - 0.5) ** 2 + 0.5
 
 # filling meshes for u
@@ -111,7 +112,7 @@ for i in range(I_max + 1):
 
     u_ad_1[0, i] = rho_mesh[i] * S_mesh[i]
     u_ad_2[0, i] = rho_mesh[i] * v_z_mesh[i] * S_mesh[i]
-    u_ad_3[0, i] = rho_mesh[i] * v_z_mesh[i] * S_mesh[i]
+    u_ad_3[0, i] = rho_mesh[i] * v_phi_mesh[i] * S_mesh[i]
     u_ad_4[0, i] = rho_mesh[i] * e_mesh[i] * S_mesh[i]
     u_ad_5[0, i] = H_phi_mesh[i] * S_mesh[i]
     u_ad_6[0, i] = H_z_mesh[i] * S_mesh[i]
@@ -144,7 +145,7 @@ for n in range(N_max):
     u_td_5[n + 1, 0] = H_phi_mesh[0] * S_mesh[0]
     u_td_6[n + 1, 0] = H_z_mesh[0] * S_mesh[0]
 
-    # left boundary condition for current layer for antidiffusion part
+    # left boundary condition for current layer for anti-diffusion part
 
     u_ad_1[n + 1, 0] = rho_mesh[0] * S_mesh[0]
     u_ad_2[n + 1, 0] = rho_mesh[0] * v_z_mesh[0] * S_mesh[0]
@@ -218,7 +219,7 @@ for n in range(N_max):
     u_td_5[n + 1, I_max] = u_td_5[n + 1, I_max - 1]
     u_td_6[n + 1, I_max] = u_td_6[n + 1, I_max - 1]
 
-    # filling central points of grid for antidiffusion part
+    # filling central points of grid for anti-diffusion part
 
     for i in range(1, I_max):
         u_ad_1[n + 1, i] = (u_td_1[n + 1, i] * (1 + tau / h * (mu_ad_right[i] + mu_ad_left[i])) -
@@ -239,7 +240,7 @@ for n in range(N_max):
         u_ad_6[n + 1, i] = (u_td_6[n + 1, i] * (1 + tau / h * (mu_ad_right[i] + mu_ad_left[i])) -
                             tau / h * (mu_ad_right[i] * u_td_6[n + 1, i + 1] + mu_ad_left[i] * u_td_6[n + 1, i - 1]))
 
-    # right boundary condition for current layer for antidiffusion part
+    # right boundary condition for current layer for anti-diffusion part
 
     u_ad_1[n + 1, I_max] = u_ad_1[n + 1, I_max - 1]
     u_ad_2[n + 1, I_max] = u_ad_2[n + 1, I_max - 1]
@@ -341,6 +342,7 @@ for n in range(N_max):
         e_mesh[i] = u_cor_4[n + 1, i] / u_cor_1[n + 1, i]
         p_mesh[i] = beta / 2 * rho_mesh[i] ** gamma
         H_phi_mesh[i] = u_cor_5[n + 1, i] / S_mesh[i]
+        H_z_mesh[i] = u_cor_6[n + 1, i] / S_mesh[i]
 
     # update tau
 
