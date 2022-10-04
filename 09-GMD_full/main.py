@@ -91,14 +91,14 @@ tau = k * h / (2 * mu_0 + v_z_0)
 # filling meshes for parameters
 
 for i in range(I_max + 1):
+    S_mesh[i] = 2 * (i * h - 0.5) ** 2 + 0.5
     rho_mesh[i] = rho_0
     v_phi_mesh[i] = v_phi_0
     v_z_mesh[i] = v_z_0
     e_mesh[i] = e_0
     p_mesh[i] = p_0
     H_phi_mesh[i] = 1 - 0.9 * i * h
-    H_z_mesh[i] = 0.1
-    S_mesh[i] = 2 * (i * h - 0.5) ** 2 + 0.5
+    H_z_mesh[i] = 0.2 / S_mesh[i]
 
 # filling meshes for u
 
@@ -342,7 +342,7 @@ for n in range(N_max):
         e_mesh[i] = u_cor_4[n + 1, i] / u_cor_1[n + 1, i]
         p_mesh[i] = beta / 2 * rho_mesh[i] ** gamma
         H_phi_mesh[i] = u_cor_5[n + 1, i] / S_mesh[i]
-        H_z_mesh[i] = u_cor_6[n + 1, i] / S_mesh[i]
+        H_z_mesh[i] = 0.2 / S_mesh[i]
 
     # update tau
 
@@ -422,7 +422,7 @@ plt.show()
 # for H_z
 
 for i in range(I_max + 1):
-    y_lst[i] = u_cor_6[n, i] / S_mesh[i]
+    y_lst[i] = 0.2 / S_mesh[i]
 
 plt.title('Longitudinal magnetic field')
 plt.xlabel('channel length coordinate')
