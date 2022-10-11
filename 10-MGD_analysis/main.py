@@ -369,6 +369,61 @@ for i_m in range(1, I_max_main + 1):
 # enter the time layer for which you want to display the values
 N = N_max_main
 
+# check intersection of velocities
+
+plt.title('H_z * S = 0')
+plt.xlabel('channel length coordinate')
+plt.ylabel('velocities value')
+plt.grid()
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          0, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='Longitudinal velocity')
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = H_phi_mesh[i_m] / np.sqrt(rho_mesh[i_m])
+plt.plot(x_lst, y_lst, label='Alfven velocity')
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = np.sqrt(H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] + gamma_main * p_mesh[i_m] / rho_mesh[i_m])
+plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
+plt.legend()
+plt.show()
+
+plt.title('H_z * S = 0.2')
+plt.xlabel('channel length coordinate')
+plt.ylabel('velocities value')
+plt.grid()
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          0.2, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='Longitudinal velocity')
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = H_phi_mesh[i_m] / np.sqrt(rho_mesh[i_m])
+plt.plot(x_lst, y_lst, label='Alfven velocity')
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = np.sqrt(H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] + gamma_main * p_mesh[i_m] / rho_mesh[i_m])
+plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
+plt.legend()
+plt.show()
+
+plt.title('H_z * S = 0.5')
+plt.xlabel('channel length coordinate')
+plt.ylabel('velocities value')
+plt.grid()
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          0.5, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='Longitudinal velocity')
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = H_phi_mesh[i_m] / np.sqrt(rho_mesh[i_m])
+plt.plot(x_lst, y_lst, label='Alfven velocity')
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = np.sqrt(H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] + gamma_main * p_mesh[i_m] / rho_mesh[i_m])
+plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
+plt.legend()
+plt.show()
 '''
 # animation of the establishment of a stationary regime of plasma flow in the channel
 
@@ -482,7 +537,7 @@ for n_m in range(0, N_max_main + 1, 5):
 
 ani = animation.ArtistAnimation(fig, images, interval=1, repeat_delay=100)
 ani.save("01 - longitudinal magnetic field.gif", writer='pillow')
-'''
+
 
 # dependence on the variation of the flux of the longitudinal magnetic field
 
@@ -508,13 +563,11 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 0.5')
-'''
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           1, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 1')
-'''
 plt.legend()
 plt.show()
 
@@ -540,13 +593,11 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 0.5')
-'''
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           1, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 1')
-'''
 plt.legend()
 plt.show()
 
@@ -572,13 +623,11 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 0.5')
-'''
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           1, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 1')
-'''
 plt.legend()
 plt.show()
 
@@ -604,13 +653,11 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 0.5')
-'''
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           1, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 1')
-'''
 plt.legend()
 plt.show()
 
@@ -636,13 +683,11 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 0.5')
-'''
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           1, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 1')
-'''
 plt.legend()
 plt.show()
 
@@ -662,10 +707,9 @@ plt.plot(x_lst, y_lst, label='H_z * S = 0.2')
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = 0.5 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 0.5')
-'''
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = 1 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='H_z * S = 1')
-'''
 plt.legend()
 plt.show()
+'''
