@@ -286,7 +286,7 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s, 
 # mesh options
 
 I_max_main = 100
-N_max_main = 1000
+N_max_main = 2500
 k_main = 0.5
 gamma_main = 1.67
 beta_main = 1
