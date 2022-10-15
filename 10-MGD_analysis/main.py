@@ -285,7 +285,7 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s, 
 
 # mesh options
 
-I_max_main = 100
+I_max_main = 200
 N_max_main = 2500
 k_main = 0.5
 gamma_main = 1.67
@@ -740,7 +740,6 @@ plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
 plt.legend()
 plt.show()
 
-'''
 # check intersection of velocities
 
 plt.title('H_z * S = 0')
@@ -756,8 +755,14 @@ for i_m in range(I_max_main + 1):
     y_lst[i_m] = H_z_mesh[i_m] / np.sqrt(rho_mesh[i_m])
 plt.plot(x_lst, y_lst, label='Alfven velocity')
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = np.sqrt(H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
-                         H_z_mesh[i_m] ** 2 / rho_mesh[i_m] + gamma_main * p_mesh[i_m] / rho_mesh[i_m])
+    y_lst[i_m] = np.sqrt(1 / 2 * (H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                  H_z_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                  gamma_main * p_mesh[i_m] / rho_mesh[i_m]) +
+                         1 / 2 * np.sqrt((H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                          H_z_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                          gamma_main * p_mesh[i_m] / rho_mesh[i_m]) ** 2 -
+                                         4 * gamma_main * p_mesh[i_m] / rho_mesh[i_m] *
+                                         H_z_mesh[i_m] ** 2 / rho_mesh[i_m]))
 plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 plt.legend()
 plt.show()
@@ -775,11 +780,18 @@ for i_m in range(I_max_main + 1):
     y_lst[i_m] = H_z_mesh[i_m] / np.sqrt(rho_mesh[i_m])
 plt.plot(x_lst, y_lst, label='Alfven velocity')
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = np.sqrt(H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
-                         H_z_mesh[i_m] ** 2 / rho_mesh[i_m] + gamma_main * p_mesh[i_m] / rho_mesh[i_m])
+    y_lst[i_m] = np.sqrt(1 / 2 * (H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                  H_z_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                  gamma_main * p_mesh[i_m] / rho_mesh[i_m]) +
+                         1 / 2 * np.sqrt((H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                          H_z_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                          gamma_main * p_mesh[i_m] / rho_mesh[i_m]) ** 2 -
+                                         4 * gamma_main * p_mesh[i_m] / rho_mesh[i_m] *
+                                         H_z_mesh[i_m] ** 2 / rho_mesh[i_m]))
 plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 plt.legend()
 plt.show()
+'''
 
 plt.title('H_z * S = 0.5')
 plt.xlabel('channel length coordinate')
@@ -794,8 +806,14 @@ for i_m in range(I_max_main + 1):
     y_lst[i_m] = H_z_mesh[i_m] / np.sqrt(rho_mesh[i_m])
 plt.plot(x_lst, y_lst, label='Alfven velocity')
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = np.sqrt(H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
-                         H_z_mesh[i_m] ** 2 / rho_mesh[i_m] + gamma_main * p_mesh[i_m] / rho_mesh[i_m])
+    y_lst[i_m] = np.sqrt(1 / 2 * (H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                  H_z_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                  gamma_main * p_mesh[i_m] / rho_mesh[i_m]) +
+                         1 / 2 * np.sqrt((H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                          H_z_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                          gamma_main * p_mesh[i_m] / rho_mesh[i_m]) ** 2 -
+                                         4 * gamma_main * p_mesh[i_m] / rho_mesh[i_m] *
+                                         H_z_mesh[i_m] ** 2 / rho_mesh[i_m]))
 plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 plt.legend()
 plt.show()
