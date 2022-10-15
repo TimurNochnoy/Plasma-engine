@@ -286,7 +286,7 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s, 
 # mesh options
 
 I_max_main = 100
-N_max_main = 1000
+N_max_main = 2500
 k_main = 0.5
 gamma_main = 1.67
 beta_main = 1
@@ -294,7 +294,7 @@ mu_0_main = 0.7
 rho_0_main = 1
 v_z_0_main = 0.1
 v_phi_0_main = 0.1
-H_z_S_main = 0.2
+H_z_S_main = 0.5
 a_main = 2
 b_main = 0.5
 
@@ -369,9 +369,383 @@ for i_m in range(1, I_max_main + 1):
 # enter the time layer for which you want to display the values
 N = N_max_main
 
-# check intersection of velocities
+'''
+# FOR VARIATION OF BETA
+
+# for rho
+
+plt.title('Plasma density')
+plt.xlabel('channel length coordinate')
+plt.ylabel('rho value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='beta = 1.0')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='beta = 10.0')
+
+plt.legend()
+plt.show()
+
+# for v_z
+
+plt.title('Longitudinal velocity')
+plt.xlabel('channel length coordinate')
+plt.ylabel('v_z value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 1.0')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 10.0')
+
+plt.legend()
+plt.show()
+
+# for v_phi
+
+plt.title('Azimuthal velocity')
+plt.xlabel('channel length coordinate')
+plt.ylabel('v_phi value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 1.0')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 10.0')
+
+plt.legend()
+plt.show()
+
+# for energy
+
+plt.title('Plasma energy')
+plt.xlabel('channel length coordinate')
+plt.ylabel('energy value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 1.0')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 10.0')
+
+plt.legend()
+plt.show()
+
+# for H_phi
+
+plt.title('Azimuthal magnetic field')
+plt.xlabel('channel length coordinate')
+plt.ylabel('H_phi value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 1.0')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='beta = 10.0')
+
+plt.legend()
+plt.show()
+'''
+
+# for H_z
+
+plt.title('Longitudinal magnetic field')
+plt.xlabel('channel length coordinate')
+plt.ylabel('H_z value')
+plt.grid()
+
+for i_m in range(I_max_main + 1):
+    S_mesh[i_m] = 2.0 * (i_m * 1 / I_max_main - 0.5) ** 2 + 0.5
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = 0.5 / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.1')
+
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = 0.5 / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='beta = 0.5')
+
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = 0.5 / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='beta = 1.0')
+
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = 0.5 / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='beta = 10.0')
+
+plt.legend()
+plt.show()
 
 '''
+# FOR VARIATION OF GEOMETRY OF CHANNEL
+
+# for rho
+
+plt.title('Plasma density')
+plt.xlabel('channel length coordinate')
+plt.ylabel('rho value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 3.6, 0.1)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 2.0, 0.5)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 0.8, 0.8)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
+
+plt.legend()
+plt.show()
+
+# for v_z
+
+plt.title('Longitudinal velocity')
+plt.xlabel('channel length coordinate')
+plt.ylabel('v_z value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 3.6, 0.1)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 2.0, 0.5)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 0.8, 0.8)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
+
+plt.legend()
+plt.show()
+
+# for v_phi
+
+plt.title('Azimuthal velocity')
+plt.xlabel('channel length coordinate')
+plt.ylabel('v_phi value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 3.6, 0.1)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 2.0, 0.5)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 0.8, 0.8)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
+
+plt.legend()
+plt.show()
+
+# for energy
+
+plt.title('Plasma energy')
+plt.xlabel('channel length coordinate')
+plt.ylabel('energy value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 3.6, 0.1)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 2.0, 0.5)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 0.8, 0.8)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
+
+plt.legend()
+plt.show()
+
+# for H_phi
+
+plt.title('Azimuthal magnetic field')
+plt.xlabel('channel length coordinate')
+plt.ylabel('H_phi value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 3.6, 0.1)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 2.0, 0.5)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, 0.8, 0.8)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
+
+plt.legend()
+plt.show()
+'''
+
+# for H_z
+
+plt.title('Longitudinal magnetic field')
+plt.xlabel('channel length coordinate')
+plt.ylabel('H_z value')
+plt.grid()
+
+for i_m in range(I_max_main + 1):
+    S_mesh[i_m] = 3.6 * (i_m * 1 / I_max_main - 0.5) ** 2 + 0.1
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = 0.5 / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
+
+for i_m in range(I_max_main + 1):
+    S_mesh[i_m] = 2.0 * (i_m * 1 / I_max_main - 0.5) ** 2 + 0.5
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = 0.5 / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+
+for i_m in range(I_max_main + 1):
+    S_mesh[i_m] = 0.8 * (i_m * 1 / I_max_main - 0.5) ** 2 + 0.8
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = 0.5 / S_mesh[i_m]
+plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
+
+plt.legend()
+plt.show()
+
+'''
+# check intersection of velocities
+
 plt.title('H_z * S = 0')
 plt.xlabel('channel length coordinate')
 plt.ylabel('velocities value')
@@ -409,7 +783,6 @@ for i_m in range(I_max_main + 1):
 plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 plt.legend()
 plt.show()
-'''
 
 plt.title('H_z * S = 0.5')
 plt.xlabel('channel length coordinate')
@@ -430,7 +803,6 @@ plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 plt.legend()
 plt.show()
 
-'''
 # animation of the establishment of a stationary regime of plasma flow in the channel
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
