@@ -541,7 +541,6 @@ plt.plot(x_lst, y_lst, label='beta = 10.0')
 
 plt.legend()
 plt.show()
-'''
 
 # for H_z
 
@@ -571,7 +570,6 @@ plt.plot(x_lst, y_lst, label='beta = 10.0')
 plt.legend()
 plt.show()
 
-'''
 # FOR VARIATION OF GEOMETRY OF CHANNEL
 
 # for rho
@@ -713,7 +711,6 @@ plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
 
 plt.legend()
 plt.show()
-'''
 
 # for H_z
 
@@ -803,6 +800,7 @@ plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 plt.legend()
 plt.show()
 
+'''
 # animation of the establishment of a stationary regime of plasma flow in the channel
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
