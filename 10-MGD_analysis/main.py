@@ -285,8 +285,8 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s, 
 
 # mesh options
 
-I_max_main = 200
-N_max_main = 2500
+I_max_main = 100
+N_max_main = 5000
 k_main = 0.5
 gamma_main = 1.67
 beta_main = 1
@@ -370,6 +370,71 @@ for i_m in range(1, I_max_main + 1):
 N = N_max_main
 
 '''
+# search critical flux for difference parameters for variation of beta
+
+beta_main = 10.0
+H_z_S_main = 0.92
+a_main = 2
+b_main = 0.5
+
+# beta = 0.1 HzScr = 0.45
+# beta = 0.5 HzScr = 0.47
+# beta = 1.0 HzScr = 0.49
+# beta = 10.0 HzScr = 0.92
+
+plt.title('Plasma density')
+# plt.title('Longitudinal velocity')
+# plt.title('Azimuthal velocity')
+# plt.title('Plasma energy')
+# plt.title('Azimuthal magnetic field')
+# plt.title('Longitudinal magnetic field')
+plt.xlabel('channel length coordinate')
+plt.ylabel('rho value')
+# plt.ylabel('v_z value')
+# plt.ylabel('v_phi value')
+# plt.ylabel('energy value')
+# plt.ylabel('H_phi value')
+# plt.ylabel('H_z value')
+plt.grid()
+
+algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
+          H_z_S_main, a_main, b_main)
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
+    # y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+    # y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
+    # y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
+    # y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+    # y_lst[i_m] = 0.5 / S_mesh[i_m]
+plt.plot(x_lst, y_lst)
+
+plt.show()
+
+plt.title('Critical longitudinal magnetic field for beta = 0.1')
+plt.xlabel('channel length coordinate')
+plt.ylabel('velocities value')
+plt.grid()
+
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
+plt.plot(x_lst, y_lst, label='Longitudinal velocity')
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = H_z_mesh[i_m] / np.sqrt(rho_mesh[i_m])
+plt.plot(x_lst, y_lst, label='Alfven velocity')
+for i_m in range(I_max_main + 1):
+    y_lst[i_m] = np.sqrt(1 / 2 * (H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                  H_z_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                  gamma_main * p_mesh[i_m] / rho_mesh[i_m]) +
+                         1 / 2 * np.sqrt((H_phi_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                          H_z_mesh[i_m] ** 2 / rho_mesh[i_m] +
+                                          gamma_main * p_mesh[i_m] / rho_mesh[i_m]) ** 2 -
+                                         4 * gamma_main * p_mesh[i_m] / rho_mesh[i_m] *
+                                         H_z_mesh[i_m] ** 2 / rho_mesh[i_m]))
+plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
+plt.legend()
+plt.show()
+'''
+
 # FOR VARIATION OF BETA
 
 # for rho
@@ -380,25 +445,25 @@ plt.ylabel('rho value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.45, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.47, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.49, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='beta = 1.0')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.92, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='beta = 10.0')
@@ -414,25 +479,25 @@ plt.ylabel('v_z value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.45, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.47, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.49, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 1.0')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.92, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 10.0')
@@ -448,25 +513,25 @@ plt.ylabel('v_phi value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.45, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.47, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.49, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 1.0')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.92, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 10.0')
@@ -482,25 +547,25 @@ plt.ylabel('energy value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.45, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.47, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.49, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 1.0')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.92, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 10.0')
@@ -516,25 +581,25 @@ plt.ylabel('H_phi value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.1, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.45, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 0.5, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.47, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 1.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.49, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 1.0')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, 10.0, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, a_main, b_main)
+          0.92, a_main, b_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='beta = 10.0')
@@ -552,23 +617,24 @@ plt.grid()
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = 2.0 * (i_m * 1 / I_max_main - 0.5) ** 2 + 0.5
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 0.5 / S_mesh[i_m]
+    y_lst[i_m] = 0.45 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.1')
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 0.5 / S_mesh[i_m]
+    y_lst[i_m] = 0.47 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='beta = 0.5')
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 0.5 / S_mesh[i_m]
+    y_lst[i_m] = 0.49 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='beta = 1.0')
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 0.5 / S_mesh[i_m]
+    y_lst[i_m] = 0.92 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='beta = 10.0')
 
 plt.legend()
 plt.show()
+'''
 
 # FOR VARIATION OF GEOMETRY OF CHANNEL
 
@@ -791,7 +857,6 @@ for i_m in range(I_max_main + 1):
 plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 plt.legend()
 plt.show()
-'''
 
 plt.title('H_z * S = 0.5')
 plt.xlabel('channel length coordinate')
@@ -818,7 +883,6 @@ plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
 plt.legend()
 plt.show()
 
-'''
 # animation of the establishment of a stationary regime of plasma flow in the channel
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
