@@ -372,15 +372,19 @@ N = N_max_main
 '''
 # search critical flux for difference parameters for variation of beta
 
-beta_main = 10.0
-H_z_S_main = 0.92
-a_main = 2
-b_main = 0.5
+beta_main = 1.0
+H_z_S_main = 1.13
+a_main = 0.8
+b_main = 0.8
 
 # beta = 0.1 HzScr = 0.45
 # beta = 0.5 HzScr = 0.47
 # beta = 1.0 HzScr = 0.49
 # beta = 10.0 HzScr = 0.92
+
+# a = 3.6, b = 0.1 HzScr = 0.055
+# a = 2, b = 0.5 HzScr = 0.49
+# a = 0.8, b = 0.8 HzScr = 1.13
 
 plt.title('Plasma density')
 # plt.title('Longitudinal velocity')
@@ -435,6 +439,7 @@ plt.legend()
 plt.show()
 '''
 
+'''
 # FOR VARIATION OF BETA
 
 # for rho
@@ -646,19 +651,19 @@ plt.ylabel('rho value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 3.6, 0.1)
+          0.055, 3.6, 0.1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 2.0, 0.5)
+          0.49, 2.0, 0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 0.8, 0.8)
+          1.13, 0.8, 0.8)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
@@ -674,19 +679,19 @@ plt.ylabel('v_z value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 3.6, 0.1)
+          0.055, 3.6, 0.1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 2.0, 0.5)
+          0.49, 2.0, 0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 0.8, 0.8)
+          1.13, 0.8, 0.8)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
@@ -702,19 +707,19 @@ plt.ylabel('v_phi value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 3.6, 0.1)
+          0.055, 3.6, 0.1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 2.0, 0.5)
+          0.49, 2.0, 0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 0.8, 0.8)
+          1.13, 0.8, 0.8)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
@@ -730,19 +735,19 @@ plt.ylabel('energy value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 3.6, 0.1)
+          0.055, 3.6, 0.1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 2.0, 0.5)
+          0.49, 2.0, 0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 0.8, 0.8)
+          1.13, 0.8, 0.8)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
@@ -758,19 +763,19 @@ plt.ylabel('H_phi value')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 3.6, 0.1)
+          0.055, 3.6, 0.1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 2.0, 0.5)
+          0.49, 2.0, 0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_main, 0.8, 0.8)
+          1.13, 0.8, 0.8)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
 plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
@@ -788,23 +793,24 @@ plt.grid()
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = 3.6 * (i_m * 1 / I_max_main - 0.5) ** 2 + 0.1
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 0.5 / S_mesh[i_m]
+    y_lst[i_m] = 0.055 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='S = 3.6(z - 0.5)^2 + 0.1')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = 2.0 * (i_m * 1 / I_max_main - 0.5) ** 2 + 0.5
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 0.5 / S_mesh[i_m]
+    y_lst[i_m] = 0.49 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = 0.8 * (i_m * 1 / I_max_main - 0.5) ** 2 + 0.8
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 0.5 / S_mesh[i_m]
+    y_lst[i_m] = 1.13 / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='S = 0.8(z - 0.5)^2 + 0.8')
 
 plt.legend()
 plt.show()
+'''
 
 # check intersection of velocities
 
