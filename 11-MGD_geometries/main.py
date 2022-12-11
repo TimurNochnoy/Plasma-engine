@@ -420,8 +420,8 @@ plt.title('Geometry of channel')
 plt.xlabel('z coordinate')
 plt.ylabel('r coordinate')
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 2 * (i_m * h_main - 0.5) ** 2 + 0.5
-plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
+plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
 plt.plot(x_lst, y_lst, label='S = -3z^3 + 6z^2 - 3z + 1')
@@ -442,12 +442,12 @@ plt.ylabel('rho value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    S_mesh[i_m] = 2 * (i_m * h_main - 0.5) ** 2 + 0.5
+    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -476,12 +476,12 @@ plt.ylabel('v_z value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    S_mesh[i_m] = 2 * (i_m * h_main - 0.5) ** 2 + 0.5
+    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -510,12 +510,12 @@ plt.ylabel('v_phi value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    S_mesh[i_m] = 2 * (i_m * h_main - 0.5) ** 2 + 0.5
+    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -544,12 +544,12 @@ plt.ylabel('energy value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    S_mesh[i_m] = 2 * (i_m * h_main - 0.5) ** 2 + 0.5
+    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -578,12 +578,12 @@ plt.ylabel('H_phi value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    S_mesh[i_m] = 2 * (i_m * h_main - 0.5) ** 2 + 0.5
+    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -612,10 +612,10 @@ plt.ylabel('H_z value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    S_mesh[i_m] = 2 * (i_m * h_main - 0.5) ** 2 + 0.5
+    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = H_z_S_main / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
+plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
