@@ -139,12 +139,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 
         # right boundary condition for current layer for transport part
 
-        u_td_1[n + 1, i_max] = u_td_1[n + 1, i_max - 1]
-        u_td_2[n + 1, i_max] = u_td_2[n + 1, i_max - 1]
-        u_td_3[n + 1, i_max] = u_td_3[n + 1, i_max - 1]
-        u_td_4[n + 1, i_max] = u_td_4[n + 1, i_max - 1]
-        u_td_5[n + 1, i_max] = u_td_5[n + 1, i_max - 1]
-        u_td_6[n + 1, i_max] = u_td_6[n + 1, i_max - 1]
+        u_td_1[n + 1, i_max] = 2 * u_td_1[n + 1, i_max - 1] - u_td_1[n + 1, i_max - 2]
+        u_td_2[n + 1, i_max] = 2 * u_td_2[n + 1, i_max - 1] - u_td_2[n + 1, i_max - 2]
+        u_td_3[n + 1, i_max] = 2 * u_td_3[n + 1, i_max - 1] - u_td_3[n + 1, i_max - 2]
+        u_td_4[n + 1, i_max] = 2 * u_td_4[n + 1, i_max - 1] - u_td_4[n + 1, i_max - 2]
+        u_td_5[n + 1, i_max] = 2 * u_td_5[n + 1, i_max - 1] - u_td_5[n + 1, i_max - 2]
+        u_td_6[n + 1, i_max] = 2 * u_td_6[n + 1, i_max - 1] - u_td_6[n + 1, i_max - 2]
 
         # filling central points of grid for anti-diffusion part
 
@@ -175,12 +175,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 
         # right boundary condition for current layer for anti-diffusion part
 
-        u_ad_1[n + 1, i_max] = u_ad_1[n + 1, i_max - 1]
-        u_ad_2[n + 1, i_max] = u_ad_2[n + 1, i_max - 1]
-        u_ad_3[n + 1, i_max] = u_ad_3[n + 1, i_max - 1]
-        u_ad_4[n + 1, i_max] = u_ad_4[n + 1, i_max - 1]
-        u_ad_5[n + 1, i_max] = u_ad_5[n + 1, i_max - 1]
-        u_ad_6[n + 1, i_max] = u_ad_6[n + 1, i_max - 1]
+        u_ad_1[n + 1, i_max] = 2 * u_ad_1[n + 1, i_max - 1] - u_ad_1[n + 1, i_max - 2]
+        u_ad_2[n + 1, i_max] = 2 * u_ad_2[n + 1, i_max - 1] - u_ad_2[n + 1, i_max - 2]
+        u_ad_3[n + 1, i_max] = 2 * u_ad_3[n + 1, i_max - 1] - u_ad_3[n + 1, i_max - 2]
+        u_ad_4[n + 1, i_max] = 2 * u_ad_4[n + 1, i_max - 1] - u_ad_4[n + 1, i_max - 2]
+        u_ad_5[n + 1, i_max] = 2 * u_ad_5[n + 1, i_max - 1] - u_ad_5[n + 1, i_max - 2]
+        u_ad_6[n + 1, i_max] = 2 * u_ad_6[n + 1, i_max - 1] - u_ad_6[n + 1, i_max - 2]
 
         # filling meshes for correction part parameters
 
@@ -259,12 +259,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
         u_cor_5[n + 1, i_max - 1] = u_ad_5[n + 1, i_max - 1]
         u_cor_6[n + 1, i_max - 1] = u_ad_6[n + 1, i_max - 1]
 
-        u_cor_1[n + 1, i_max] = u_cor_1[n + 1, i_max - 1]
-        u_cor_2[n + 1, i_max] = u_cor_2[n + 1, i_max - 1]
-        u_cor_3[n + 1, i_max] = u_cor_3[n + 1, i_max - 1]
-        u_cor_4[n + 1, i_max] = u_cor_4[n + 1, i_max - 1]
-        u_cor_5[n + 1, i_max] = u_cor_5[n + 1, i_max - 1]
-        u_cor_6[n + 1, i_max] = u_cor_6[n + 1, i_max - 1]
+        u_cor_1[n + 1, i_max] = 2 * u_cor_1[n + 1, i_max - 1] - u_cor_1[n + 1, i_max - 2]
+        u_cor_2[n + 1, i_max] = 2 * u_cor_2[n + 1, i_max - 1] - u_cor_2[n + 1, i_max - 2]
+        u_cor_3[n + 1, i_max] = 2 * u_cor_3[n + 1, i_max - 1] - u_cor_3[n + 1, i_max - 2]
+        u_cor_4[n + 1, i_max] = 2 * u_cor_4[n + 1, i_max - 1] - u_cor_4[n + 1, i_max - 2]
+        u_cor_5[n + 1, i_max] = 2 * u_cor_5[n + 1, i_max - 1] - u_cor_5[n + 1, i_max - 2]
+        u_cor_6[n + 1, i_max] = 2 * u_cor_6[n + 1, i_max - 1] - u_cor_6[n + 1, i_max - 2]
 
         # update parameters of problem
 
@@ -285,7 +285,7 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 # mesh options
 
 I_max_main = 200
-N_max_main = 3000
+N_max_main = 5000
 k_main = 0.5
 gamma_main = 1.67
 beta_main = 1
