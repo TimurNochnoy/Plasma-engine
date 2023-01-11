@@ -285,7 +285,7 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 # mesh options
 
 I_max_main = 200
-N_max_main = 5000
+N_max_main = 3000
 k_main = 0.5
 gamma_main = 1.67
 beta_main = 1
@@ -293,7 +293,7 @@ mu_0_main = 0.7
 rho_0_main = 1
 v_z_0_main = 0.1
 v_phi_0_main = 0.1
-H_z_S_main = 0.49
+H_z_S_main = 0.3
 h_main = 1 / I_max_main
 
 # u = {rho*S, rho*v_z*S, rho*v_phi*S, rho*energy*S, H_phi*S, H_z*S}
@@ -438,7 +438,7 @@ plt.ylabel('H_phi value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
+    y_lst[i_m] = u_cor_5[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst, label='S = 2(z - 0.5)^2 + 0.5')
 
 plt.legend()
