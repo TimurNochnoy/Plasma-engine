@@ -139,12 +139,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 
         # right boundary condition for current layer for transport part
 
-        u_td_1[n + 1, i_max] = 2 * u_td_1[n + 1, i_max - 1] - u_td_1[n + 1, i_max - 2]
-        u_td_2[n + 1, i_max] = 2 * u_td_2[n + 1, i_max - 1] - u_td_2[n + 1, i_max - 2]
-        u_td_3[n + 1, i_max] = 2 * u_td_3[n + 1, i_max - 1] - u_td_3[n + 1, i_max - 2]
-        u_td_4[n + 1, i_max] = 2 * u_td_4[n + 1, i_max - 1] - u_td_4[n + 1, i_max - 2]
-        u_td_5[n + 1, i_max] = 2 * u_td_5[n + 1, i_max - 1] - u_td_5[n + 1, i_max - 2]
-        u_td_6[n + 1, i_max] = 2 * u_td_6[n + 1, i_max - 1] - u_td_6[n + 1, i_max - 2]
+        u_td_1[n + 1, i_max] = u_td_1[n + 1, i_max - 1]
+        u_td_2[n + 1, i_max] = u_td_2[n + 1, i_max - 1]
+        u_td_3[n + 1, i_max] = u_td_3[n + 1, i_max - 1]
+        u_td_4[n + 1, i_max] = u_td_4[n + 1, i_max - 1]
+        u_td_5[n + 1, i_max] = u_td_5[n + 1, i_max - 1]
+        u_td_6[n + 1, i_max] = u_td_6[n + 1, i_max - 1]
 
         # filling central points of grid for anti-diffusion part
 
@@ -175,12 +175,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 
         # right boundary condition for current layer for anti-diffusion part
 
-        u_ad_1[n + 1, i_max] = 2 * u_ad_1[n + 1, i_max - 1] - u_ad_1[n + 1, i_max - 2]
-        u_ad_2[n + 1, i_max] = 2 * u_ad_2[n + 1, i_max - 1] - u_ad_2[n + 1, i_max - 2]
-        u_ad_3[n + 1, i_max] = 2 * u_ad_3[n + 1, i_max - 1] - u_ad_3[n + 1, i_max - 2]
-        u_ad_4[n + 1, i_max] = 2 * u_ad_4[n + 1, i_max - 1] - u_ad_4[n + 1, i_max - 2]
-        u_ad_5[n + 1, i_max] = 2 * u_ad_5[n + 1, i_max - 1] - u_ad_5[n + 1, i_max - 2]
-        u_ad_6[n + 1, i_max] = 2 * u_ad_6[n + 1, i_max - 1] - u_ad_6[n + 1, i_max - 2]
+        u_ad_1[n + 1, i_max] = u_ad_1[n + 1, i_max - 1]
+        u_ad_2[n + 1, i_max] = u_ad_2[n + 1, i_max - 1]
+        u_ad_3[n + 1, i_max] = u_ad_3[n + 1, i_max - 1]
+        u_ad_4[n + 1, i_max] = u_ad_4[n + 1, i_max - 1]
+        u_ad_5[n + 1, i_max] = u_ad_5[n + 1, i_max - 1]
+        u_ad_6[n + 1, i_max] = u_ad_6[n + 1, i_max - 1]
 
         # filling meshes for correction part parameters
 
@@ -259,12 +259,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
         u_cor_5[n + 1, i_max - 1] = u_ad_5[n + 1, i_max - 1]
         u_cor_6[n + 1, i_max - 1] = u_ad_6[n + 1, i_max - 1]
 
-        u_cor_1[n + 1, i_max] = 2 * u_cor_1[n + 1, i_max - 1] - u_cor_1[n + 1, i_max - 2]
-        u_cor_2[n + 1, i_max] = 2 * u_cor_2[n + 1, i_max - 1] - u_cor_2[n + 1, i_max - 2]
-        u_cor_3[n + 1, i_max] = 2 * u_cor_3[n + 1, i_max - 1] - u_cor_3[n + 1, i_max - 2]
-        u_cor_4[n + 1, i_max] = 2 * u_cor_4[n + 1, i_max - 1] - u_cor_4[n + 1, i_max - 2]
-        u_cor_5[n + 1, i_max] = 2 * u_cor_5[n + 1, i_max - 1] - u_cor_5[n + 1, i_max - 2]
-        u_cor_6[n + 1, i_max] = 2 * u_cor_6[n + 1, i_max - 1] - u_cor_6[n + 1, i_max - 2]
+        u_cor_1[n + 1, i_max] = u_cor_1[n + 1, i_max - 1]
+        u_cor_2[n + 1, i_max] = u_cor_2[n + 1, i_max - 1]
+        u_cor_3[n + 1, i_max] = u_cor_3[n + 1, i_max - 1]
+        u_cor_4[n + 1, i_max] = u_cor_4[n + 1, i_max - 1]
+        u_cor_5[n + 1, i_max] = u_cor_5[n + 1, i_max - 1]
+        u_cor_6[n + 1, i_max] = u_cor_6[n + 1, i_max - 1]
 
         # update parameters of problem
 
@@ -284,7 +284,7 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 
 # mesh options
 
-I_max_main = 200
+I_max_main = 100
 N_max_main = 5000
 k_main = 0.5
 gamma_main = 1.67
@@ -371,12 +371,12 @@ N = N_max_main
 
 beta_main = 1.0
 H_z_S_main = 0.58
-H_z_S_cr_1 = 0.02
-H_z_S_cr_2 = 0.56
+H_z_S_cr_1 = 0.54
+H_z_S_cr_2 = 0.6
 
 # S = 1.78(z - 0.5)^2 + 0.555 -> H_z_S_main = 0.58
-# S = -3z^3 + 6z^2 - 3z + 1 -> HzS_cr_1 = 0.52
-# S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1 -> HzS_cr_2 = 0.56
+# S = -3z^3 + 6z^2 - 3z + 1 -> HzS_cr_1 = 0.54
+# S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1 -> HzS_cr_2 = 0.6
 
 plt.title('Plasma density')
 plt.xlabel('channel length coordinate')
@@ -384,9 +384,9 @@ plt.ylabel('rho value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
+    S_mesh[i_m] = 3 * (i_m * h_main - 1) ** 3 + 6 * (i_m * h_main - 1) ** 2 + 3 * (i_m * h_main - 1) + 1
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_cr_1)
+          H_z_S_cr_2)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst)
