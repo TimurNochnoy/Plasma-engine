@@ -139,12 +139,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 
         # right boundary condition for current layer for transport part
 
-        u_td_1[n + 1, i_max] = u_td_1[n + 1, i_max - 1]
-        u_td_2[n + 1, i_max] = u_td_2[n + 1, i_max - 1]
-        u_td_3[n + 1, i_max] = u_td_3[n + 1, i_max - 1]
-        u_td_4[n + 1, i_max] = u_td_4[n + 1, i_max - 1]
-        u_td_5[n + 1, i_max] = u_td_5[n + 1, i_max - 1]
-        u_td_6[n + 1, i_max] = u_td_6[n + 1, i_max - 1]
+        u_td_1[n + 1, i_max] = 2 * u_td_1[n + 1, i_max - 1] - u_td_1[n + 1, i_max - 2]
+        u_td_2[n + 1, i_max] = 2 * u_td_2[n + 1, i_max - 1] - u_td_2[n + 1, i_max - 2]
+        u_td_3[n + 1, i_max] = 2 * u_td_3[n + 1, i_max - 1] - u_td_3[n + 1, i_max - 2]
+        u_td_4[n + 1, i_max] = 2 * u_td_4[n + 1, i_max - 1] - u_td_4[n + 1, i_max - 2]
+        u_td_5[n + 1, i_max] = 2 * u_td_5[n + 1, i_max - 1] - u_td_5[n + 1, i_max - 2]
+        u_td_6[n + 1, i_max] = 2 * u_td_6[n + 1, i_max - 1] - u_td_6[n + 1, i_max - 2]
 
         # filling central points of grid for anti-diffusion part
 
@@ -175,12 +175,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 
         # right boundary condition for current layer for anti-diffusion part
 
-        u_ad_1[n + 1, i_max] = u_ad_1[n + 1, i_max - 1]
-        u_ad_2[n + 1, i_max] = u_ad_2[n + 1, i_max - 1]
-        u_ad_3[n + 1, i_max] = u_ad_3[n + 1, i_max - 1]
-        u_ad_4[n + 1, i_max] = u_ad_4[n + 1, i_max - 1]
-        u_ad_5[n + 1, i_max] = u_ad_5[n + 1, i_max - 1]
-        u_ad_6[n + 1, i_max] = u_ad_6[n + 1, i_max - 1]
+        u_ad_1[n + 1, i_max] = 2 * u_ad_1[n + 1, i_max - 1] - u_ad_1[n + 1, i_max - 2]
+        u_ad_2[n + 1, i_max] = 2 * u_ad_2[n + 1, i_max - 1] - u_ad_2[n + 1, i_max - 2]
+        u_ad_3[n + 1, i_max] = 2 * u_ad_3[n + 1, i_max - 1] - u_ad_3[n + 1, i_max - 2]
+        u_ad_4[n + 1, i_max] = 2 * u_ad_4[n + 1, i_max - 1] - u_ad_4[n + 1, i_max - 2]
+        u_ad_5[n + 1, i_max] = 2 * u_ad_5[n + 1, i_max - 1] - u_ad_5[n + 1, i_max - 2]
+        u_ad_6[n + 1, i_max] = 2 * u_ad_6[n + 1, i_max - 1] - u_ad_6[n + 1, i_max - 2]
 
         # filling meshes for correction part parameters
 
@@ -259,12 +259,12 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
         u_cor_5[n + 1, i_max - 1] = u_ad_5[n + 1, i_max - 1]
         u_cor_6[n + 1, i_max - 1] = u_ad_6[n + 1, i_max - 1]
 
-        u_cor_1[n + 1, i_max] = u_cor_1[n + 1, i_max - 1]
-        u_cor_2[n + 1, i_max] = u_cor_2[n + 1, i_max - 1]
-        u_cor_3[n + 1, i_max] = u_cor_3[n + 1, i_max - 1]
-        u_cor_4[n + 1, i_max] = u_cor_4[n + 1, i_max - 1]
-        u_cor_5[n + 1, i_max] = u_cor_5[n + 1, i_max - 1]
-        u_cor_6[n + 1, i_max] = u_cor_6[n + 1, i_max - 1]
+        u_cor_1[n + 1, i_max] = 2 * u_cor_1[n + 1, i_max - 1] - u_cor_1[n + 1, i_max - 2]
+        u_cor_2[n + 1, i_max] = 2 * u_cor_2[n + 1, i_max - 1] - u_cor_2[n + 1, i_max - 2]
+        u_cor_3[n + 1, i_max] = 2 * u_cor_3[n + 1, i_max - 1] - u_cor_3[n + 1, i_max - 2]
+        u_cor_4[n + 1, i_max] = 2 * u_cor_4[n + 1, i_max - 1] - u_cor_4[n + 1, i_max - 2]
+        u_cor_5[n + 1, i_max] = 2 * u_cor_5[n + 1, i_max - 1] - u_cor_5[n + 1, i_max - 2]
+        u_cor_6[n + 1, i_max] = 2 * u_cor_6[n + 1, i_max - 1] - u_cor_6[n + 1, i_max - 2]
 
         # update parameters of problem
 
@@ -284,7 +284,7 @@ def algorithm(i_max, n_max, k, gamma, beta, mu_0, rho_0, v_z_0, v_phi_0, h_z_s):
 
 # mesh options
 
-I_max_main = 100
+I_max_main = 200
 N_max_main = 5000
 k_main = 0.5
 gamma_main = 1.67
@@ -292,7 +292,7 @@ beta_main = 1
 mu_0_main = 0.7
 rho_0_main = 1
 v_z_0_main = 0.1
-v_phi_0_main = 0.1
+v_phi_0_main = 0
 H_z_S_main = 0.49
 h_main = 1 / I_max_main
 
@@ -370,11 +370,13 @@ N = N_max_main
 # search critical flux for difference parameters for variation of beta
 
 beta_main = 1.0
-H_z_S_cr_1 = 0.52
-H_z_S_cr_2 = 0.6
+H_z_S_main = 0.58
+H_z_S_cr_1 = 0.02
+H_z_S_cr_2 = 0.56
 
-# S = -3z^3 + 6z^2 - 3z + 1 -> HzS_cr_1 = 0.53
-# S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1 -> HzS_cr_2 = 0.53
+# S = 1.78(z - 0.5)^2 + 0.555 -> H_z_S_main = 0.58
+# S = -3z^3 + 6z^2 - 3z + 1 -> HzS_cr_1 = 0.52
+# S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1 -> HzS_cr_2 = 0.56
 
 plt.title('Plasma density')
 plt.xlabel('channel length coordinate')
@@ -382,9 +384,9 @@ plt.ylabel('rho value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    S_mesh[i_m] = 3 * (i_m * h_main - 1) ** 3 + 6 * (i_m * h_main - 1) ** 2 + 3 * (i_m * h_main - 1) + 1
+    S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
-          H_z_S_cr_2)
+          H_z_S_cr_1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
 plt.plot(x_lst, y_lst)
@@ -411,7 +413,7 @@ for i_m in range(I_max_main + 1):
                                           gamma_main * p_mesh[i_m] / rho_mesh[i_m]) ** 2 -
                                          4 * gamma_main * p_mesh[i_m] / rho_mesh[i_m] *
                                          H_z_mesh[i_m] ** 2 / rho_mesh[i_m]))
-plt.plot(x_lst, y_lst, label='Fast magnetosonic velocity')
+plt.plot(x_lst, y_lst, label='Fast magneto-sonic velocity')
 plt.legend()
 plt.show()
 
@@ -420,8 +422,8 @@ plt.title('Geometry of channel')
 plt.xlabel('z coordinate')
 plt.ylabel('r coordinate')
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
-plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
+    y_lst[i_m] = 1.78 * (i_m * h_main - 0.5) ** 2 + 0.555
+plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
 plt.plot(x_lst, y_lst, label='S = -3z^3 + 6z^2 - 3z + 1')
@@ -442,12 +444,12 @@ plt.ylabel('rho value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
+    y_lst[i_m] = 1.78 * (i_m * h_main - 0.5) ** 2 + 0.555
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
+plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -476,12 +478,12 @@ plt.ylabel('v_z value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
+    y_lst[i_m] = 1.78 * (i_m * h_main - 0.5) ** 2 + 0.555
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
+plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -510,12 +512,12 @@ plt.ylabel('v_phi value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
+    y_lst[i_m] = 1.78 * (i_m * h_main - 0.5) ** 2 + 0.555
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
+plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -544,12 +546,12 @@ plt.ylabel('energy value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
+    y_lst[i_m] = 1.78 * (i_m * h_main - 0.5) ** 2 + 0.555
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_4[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
+plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -578,12 +580,12 @@ plt.ylabel('H_phi value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
+    y_lst[i_m] = 1.78 * (i_m * h_main - 0.5) ** 2 + 0.555
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
+plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -612,10 +614,10 @@ plt.ylabel('H_z value')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
-    y_lst[i_m] = 1.8 * (i_m * h_main - 0.5) ** 2 + 0.55
+    y_lst[i_m] = 1.78 * (i_m * h_main - 0.5) ** 2 + 0.555
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = H_z_S_main / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='S = 1.8(z - 0.5)^2 + 0.55')
+plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
