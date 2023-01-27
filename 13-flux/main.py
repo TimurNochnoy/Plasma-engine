@@ -374,7 +374,7 @@ for i_m in range(I_max_main + 1):
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           H_z_S_main)
 
-# FOR VARIATION OF GEOMETRY OF CHANNEL
+# FOR VARIATION OF FLUXES
 
 # for rho
 
