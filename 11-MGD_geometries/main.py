@@ -370,9 +370,9 @@ N = N_max_main
 # search critical flux for difference parameters for variation of beta
 
 beta_main = 1.0
-H_z_S_main = 0.58
-H_z_S_cr_1 = 0.54
-H_z_S_cr_2 = 0.6
+H_z_S_main = 0.45
+H_z_S_cr_1 = 0.45
+H_z_S_cr_2 = 0.45
 
 # S = 1.78(z - 0.5)^2 + 0.555 -> H_z_S_main = 0.58
 # S = -3z^3 + 6z^2 - 3z + 1 -> HzS_cr_1 = 0.54
