@@ -101,7 +101,7 @@ int main() {
 
 	int L_max = 100;
 	int M_max = 100;
-	int N_max = 5;
+	int N_max = 1000; // 800 - 810 crash, 780
 
 	// U = {rho*r*R, rho*u*r*R, rho*v*r*R, rho*w*r*R, rho*energy*r*R, H_phi*R, H_z*r*R, H_y*r*R}
 
@@ -203,51 +203,6 @@ int main() {
 	// filling zeros
 
 	for (int l = 0; l < L_max + 1; l++) {
-		for (int m = 0; m < M_max + 1; m++) {
-			u_td_1_next[l][m] = 0;
-			u_td_2_next[l][m] = 0;
-			u_td_3_next[l][m] = 0;
-			u_td_4_next[l][m] = 0;
-			u_td_5_next[l][m] = 0;
-			u_td_6_next[l][m] = 0;
-			u_td_7_next[l][m] = 0;
-			u_td_8_next[l][m] = 0;
-
-			u_td_1[l][m] = 0;
-			u_td_2[l][m] = 0;
-			u_td_3[l][m] = 0;
-			u_td_4[l][m] = 0;
-			u_td_5[l][m] = 0;
-			u_td_6[l][m] = 0;
-			u_td_7[l][m] = 0;
-			u_td_8[l][m] = 0;
-
-			C_0[l][m] = 0;
-			C_l_left[l][m] = 0;
-			C_l_right[l][m] = 0;
-			C_m_left[l][m] = 0;
-			C_m_right[l][m] = 0;
-
-			rho[l][m] = 0;
-			v_r[l][m] = 0;
-			v_phi[l][m] = 0;
-			v_z[l][m] = 0;
-			e[l][m] = 0;
-			p[l][m] = 0;
-			P[l][m] = 0;
-			H_r[l][m] = 0;
-			H_phi[l][m] = 0;
-			H_z[l][m] = 0;
-
-			r[l][m] = 0;
-			r_z[l][m] = 0;
-
-			v_y[l][m] = 0;
-			H_y[l][m] = 0;
-		}
-	}
-
-	for (int l = 0; l < L_max + 1; l++) {
 		mu_l_left[l] = 0;
 		mu_l_right[l] = 0;
 		R[l] = 0;
@@ -267,27 +222,28 @@ int main() {
 	// initial condition
 
 	for (int l = 0; l < L_max + 1; l++) {
+		R[l] = r2(l * dz) - r1(l * dz);
+		
 		for (int m = 0; m < M_max + 1; m++) {
-			rho[l][m] = 1.0;
-			v_r[l][m] = 0;
-			v_phi[l][m] = 0;
-			v_z[l][m] = 0;
-			H_r[l][m] = 0;
-			H_phi[l][m] = 0;
-			H_z[l][m] = 0;
-			
-			e[l][m] = beta / (2.0 * (gamma - 1.0));
-			p[l][m] = (gamma - 1.0) * rho[l][m] * e[l][m];
-			P[l][m] = p[l][m] + 1.0 / 2.0 * (pow(H_z[l][m], 2) + pow(H_r[l][m], 2) + pow(H_phi[l][m], 2));
+			r[l][m] = (1 - m * dy) * r1(l * dz) + m * dy * r2(l * dz);
+			r_z[l][m] = (1 - m * dy) * der_r1(l * dz) + m * dy * der_r2(l * dz);
 		}
 	}
 
 	for (int l = 0; l < L_max + 1; l++) {
-		R[l] = r2(l * dz) - r1(l * dz);
-
 		for (int m = 0; m < M_max + 1; m++) {
-			r[l][m] = (1 - m * dy) * r1(l * dz) + m * dy * r2(l * dz);
-			r_z[l][m] = (1 - m * dy) * der_r1(l * dz) + m * dy * der_r2(l * dz);
+			rho[l][m] = 1.0;
+			v_r[l][m] = 0.1;
+			v_phi[l][m] = 0;
+			v_z[l][m] = 0.1;
+			H_r[l][m] = 0;
+			H_phi[l][m] = (1 - 0.9 * l * dz) * r_0 / r[l][m];
+			//printf("%lf\n", H_phi[l][m]);
+			H_z[l][m] = 0;
+			
+			e[l][m] = beta / (2.0 * (gamma - 1.0)) * pow(rho[l][m], gamma - 1.0);
+			p[l][m] = (gamma - 1.0) * rho[l][m] * e[l][m];
+			P[l][m] = p[l][m] + 1.0 / 2.0 * (pow(H_z[l][m], 2) + pow(H_r[l][m], 2) + pow(H_phi[l][m], 2));
 
 			v_y[l][m] = v_r[l][m] - v_z[l][m] * r_z[l][m];
 			H_y[l][m] = H_r[l][m] - H_z[l][m] * r_z[l][m];
@@ -321,8 +277,9 @@ int main() {
 			v_y[0][m] = 0;
 			H_y[0][m] = 0;
 			H_phi[0][m] = r_0 / r[0][m];
+			//printf("%lf\n", H_phi[0][m]);
 			H_z[0][m] = 0;
-			e[0][m] = beta / (2.0 * (gamma - 1.0));
+			e[0][m] = beta / (2.0 * (gamma - 1.0)) * pow(rho[0][m], gamma - 1.0);
 		}
 
 		// up an down boundary condition for current layer
@@ -379,15 +336,25 @@ int main() {
 				mu_m_right[m] = mu_0_m + (abs(v_y[l][m]) + abs(v_y[l][m + 1])) / 4.0;
 
 				C_0[l][m] = 1 - dt / dz * (v_z[l + 1][m] - v_z[l - 1][m]) / 4.0 -
-								dt / (dy * R[l]) * (v_z[l][m + 1] - v_z[l][m - 1]) / 4.0 -
+								dt / dy * (v_z[l][m + 1] - v_z[l][m - 1]) / 4.0 -
 								dt / dz * (mu_l_left[l] + mu_l_right[l]) - 
-								dt / (dy * R[l]) * (mu_m_left[m] + mu_m_right[m]);
+								dt / dy * (mu_m_left[m] + mu_m_right[m]);
 				C_l_left[l][m] = dt / dz * ((v_z[l - 1][m] + v_z[l][m]) / 4.0 + mu_l_left[l]);
 				C_l_right[l][m] = dt / dz * (- (v_z[l][m] + v_z[l + 1][m]) / 4.0 + mu_l_right[l]);
-				C_m_left[l][m] = dt / (dy * R[l]) * ((v_y[l][m - 1] + v_y[l][m]) / 4.0 + mu_m_left[m]);
-				C_m_right[l][m] = dt / (dy * R[l]) * (- (v_y[l][m] + v_y[l][m + 1]) / 4.0 + mu_m_right[m]);
+				C_m_left[l][m] = dt / dy * ((v_y[l][m - 1] + v_y[l][m]) / 4.0 + mu_m_left[m]);
+				C_m_right[l][m] = dt / dy * (- (v_y[l][m] + v_y[l][m + 1]) / 4.0 + mu_m_right[m]);
 			}
 		}
+
+		//printf("mu_l_l=%lf   mu_l_r=%lf   mu_m_l=%lf   mu_m_r=%lf   C0=%lf\n", mu_l_left[50], mu_l_right[50],  mu_m_left[50], mu_m_right[50], C_0[50][50]);
+		//printf("C_l_l=%lf   C_l_r=%lf   C_m_l=%lf   C_m_r=%lf   C0=%lf\n", C_l_left[50][50], C_l_right[50][50],  C_m_left[50][50], C_m_right[50][50], C_0[50][50]);
+		//printf("v_z=%lf   v_y=%lf   C0=%lf\n", v_z[50][50], v_y[50][50], C_0[50][50]);
+		//printf("v_z_l_l=%lf   v_z_l_r=%lf   v_z_m_r=%lf   v_z_m_r=%lf\n", v_z[49][50], v_y[51][50], v_z[50][49], v_z[50][51]);
+		//printf("R=%lf\n", R[50]);
+		//printf("dt=%lf   dz=%lf   dy=%lf\n", dt, dz, dy);
+
+		//printf("\n\n");
+
 
 		// filling central points of grid for transport part
 
@@ -406,7 +373,7 @@ int main() {
 									C_m_right[l][m] * u_td_2[l][m + 1] -
 									dt / (2.0 * dz) * ((P[l + 1][m] - pow(H_z[l + 1][m], 2)) * r[l + 1][m] * R[l + 1] - 
 													   (P[l - 1][m] - pow(H_z[l - 1][m], 2)) * r[l - 1][m] * R[l - 1]) +
-									dt / (2.0 * dy) * ((r_z[l][m + 1] * P[l][m + 1] + H_z[l][m + 1] * H_y[l][m + 1]) * r[l][m + 1] -
+									dt / (2.0 * dy) * ((r_z[l][m + 1] * P[l][m + 1] + H_z[l][m + 1] * H_y[l][m + 1]) * r[l][m + 1] - 
 													   (r_z[l][m - 1] * P[l][m - 1] + H_z[l][m - 1] * H_y[l][m - 1]) * r[l][m - 1]);
 				
 				u_td_3_next[l][m] = C_0[l][m] * u_td_3[l][m] + 
@@ -427,8 +394,8 @@ int main() {
 									C_m_right[l][m] * u_td_4[l][m + 1] + 
 									dt / (2.0 * dz) * (H_phi[l + 1][m] * H_z[l + 1][m] * r[l + 1][m] * R[l + 1] - 
 													   H_phi[l - 1][m] * H_z[l - 1][m] * r[l - 1][m] * R[l - 1]) +
-									dt / (2.0 * dy) * (H_z[l][m + 1] * H_y[l][m + 1] * r[l][m + 1] -
-													   H_z[l][m - 1] * H_y[l][m - 1] * r[l][m - 1]) +
+									dt / (2.0 * dy) * (H_phi[l][m + 1] * H_y[l][m + 1] * r[l][m + 1] -
+													   H_phi[l][m - 1] * H_y[l][m - 1] * r[l][m - 1]) +
 									dt * (- rho[l][m] * v_r[l][m] * v_phi[l][m] + H_phi[l][m] * H_r[l][m]) * R[l];
 
 				u_td_5_next[l][m] = C_0[l][m] * u_td_5[l][m] + 
@@ -446,8 +413,8 @@ int main() {
 									C_l_right[l][m] * u_td_6[l + 1][m] +
 									C_m_left[l][m] * u_td_6[l][m - 1] +
 									C_m_right[l][m] * u_td_6[l][m + 1] +
-									dt / (2.0 * dz) * (H_phi[l + 1][m] * v_phi[l + 1][m] * R[l + 1] - 
-													   H_phi[l - 1][m] * v_phi[l - 1][m] * R[l - 1]) + 
+									dt / (2.0 * dz) * (H_z[l + 1][m] * v_phi[l + 1][m] * R[l + 1] - 
+													   H_z[l - 1][m] * v_phi[l - 1][m] * R[l - 1]) + 
 									dt / (2.0 * dy) * (H_y[l][m + 1] * v_phi[l][m + 1] -
 													   H_y[l][m - 1] * v_phi[l][m - 1]);
 				
@@ -468,6 +435,8 @@ int main() {
 													   H_z[l - 1][m] * v_y[l - 1][m] * r[l - 1][m]);
 			}
 		}
+
+		//printf("%lf %lf\n", u_td_1_next[50][50], C_0[50][50]);
 
 		// right boundary condition for current layer for transport part
 
@@ -521,6 +490,8 @@ int main() {
 		// update tau
 		
 		dt = k / (2.0 * max_for_dt(mu_l_right, mu_m_right, R, dz, dy, L_max, M_max));
+		//printf("%lf\n", dt);
+		// found zero value in dt
 		
 	}
 
