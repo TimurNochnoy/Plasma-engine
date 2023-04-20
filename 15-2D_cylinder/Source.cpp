@@ -101,7 +101,7 @@ int main() {
 
 	int L_max = 80;
 	int M_max = 40;
-	int N_max = 10000;
+	int N_max = 80000;
 	
 	// U = {rho*r*R, rho*u*r*R, rho*v*r*R, rho*w*r*R, rho*energy*r*R, H_phi*R, H_z*r*R, H_y*r}
 
@@ -272,7 +272,7 @@ int main() {
 			u_td_5[l][m] = rho[l][m] * e[l][m] * r[l][m];
 			u_td_6[l][m] = H_phi[l][m];
 			u_td_7[l][m] = H_z[l][m] * r[l][m];
-			u_td_8[l][m] = H_y[l][m] * r[l][m];
+			u_td_8[l][m] = H_r[l][m] * r[l][m]; // y -> r
 		}
 	}
 
@@ -312,7 +312,7 @@ int main() {
 			u_td_5_next[0][m] = rho[0][m] * e[0][m] * r[0][m];
 			u_td_6_next[0][m] = H_phi[0][m];
 			u_td_7_next[0][m] = H_z[0][m] * r[0][m];
-			u_td_8_next[0][m] = H_y[0][m] * r[0][m];
+			u_td_8_next[0][m] = H_r[0][m] * r[0][m]; // y -> r
 		}
 
 		// up and down boundary condition for current layer for transport part
@@ -325,7 +325,7 @@ int main() {
 			u_td_5_next[l][0] = rho[l][0] * e[l][0] * r[l][0];
 			u_td_6_next[l][0] = H_phi[l][0];
 			u_td_7_next[l][0] = H_z[l][0] * r[l][0];
-			u_td_8_next[l][0] = H_y[l][0] * r[l][0];
+			u_td_8_next[l][0] = H_r[l][0] * r[l][0]; // y -> r
 
 			u_td_1_next[l][M_max] = rho[l][M_max] * r[l][M_max];
 			u_td_2_next[l][M_max] = rho[l][M_max] * v_z[l][M_max] * r[l][M_max];
@@ -334,7 +334,7 @@ int main() {
 			u_td_5_next[l][M_max] = rho[l][M_max] * e[l][M_max] * r[l][M_max];
 			u_td_6_next[l][M_max] = H_phi[l][M_max];
 			u_td_7_next[l][M_max] = H_z[l][M_max] * r[l][M_max];
-			u_td_8_next[l][M_max] = H_y[l][M_max] * r[l][M_max];
+			u_td_8_next[l][M_max] = H_r[l][M_max] * r[l][M_max]; // y -> r
 		}
 
 		// constants for current layer
@@ -358,12 +358,12 @@ int main() {
 
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
-				C_0[l][m] = 1 - dt / dz * (v_z[l + 1][m] - v_z[l - 1][m]) / 4.0 - dt / dr[l] * (v_y[l][m + 1] - v_y[l][m - 1]) / 4.0 
+				C_0[l][m] = 1 - dt / dz * (v_z[l + 1][m] - v_z[l - 1][m]) / 4.0 - dt / dr[l] * (v_r[l][m + 1] - v_r[l][m - 1]) / 4.0 // y -> r
 							  - dt / dz * (mu_l_left[l][m] + mu_l_right[l][m]) - dt / dr[l] * (mu_m_left[l][m] + mu_m_right[l][m]);
 				C_l_left[l][m] = dt / dz * ((v_z[l - 1][m] + v_z[l][m]) / 4.0 + mu_l_left[l][m]);
 				C_l_right[l][m] = dt / dz * (- (v_z[l][m] + v_z[l + 1][m]) / 4.0 + mu_l_right[l][m]);
-				C_m_left[l][m] = dt / dr[l] * ((v_y[l][m - 1] + v_y[l][m]) / 4.0 + mu_m_left[l][m]);
-				C_m_right[l][m] = dt / dr[l] * (- (v_y[l][m] + v_y[l][m + 1]) / 4.0 + mu_m_right[l][m]);
+				C_m_left[l][m] = dt / dr[l] * ((v_r[l][m - 1] + v_r[l][m]) / 4.0 + mu_m_left[l][m]); // y -> r
+				C_m_right[l][m] = dt / dr[l] * (- (v_r[l][m] + v_r[l][m + 1]) / 4.0 + mu_m_right[l][m]); // y -> r
 			}
 		}
 
@@ -398,8 +398,9 @@ int main() {
 									C_m_right[l][m] * u_td_2[l][m + 1] -
 									dt / (2.0 * dz) * ((P[l + 1][m] - pow(H_z[l + 1][m], 2)) * r[l + 1][m] - 
 													   (P[l - 1][m] - pow(H_z[l - 1][m], 2)) * r[l - 1][m]) +
-									dt / (2.0 * dr[l]) * ((r_z[l][m + 1] * P[l][m + 1] + H_z[l][m + 1] * H_y[l][m + 1]) * r[l][m + 1] - 
-													      (r_z[l][m - 1] * P[l][m - 1] + H_z[l][m - 1] * H_y[l][m - 1]) * r[l][m - 1]);
+									//dt / (2.0 * dr[l]) * ((r_z[l][m + 1] * P[l][m + 1] + H_z[l][m + 1] * H_y[l][m + 1]) * r[l][m + 1] - 
+										//			      (r_z[l][m - 1] * P[l][m - 1] + H_z[l][m - 1] * H_y[l][m - 1]) * r[l][m - 1]);
+										+ dt * (H_z[l][m + 1] * H_r[l][m + 1] * r[l][m] - H_z[l][m - 1] * H_r[l][m - 1] * r[l][m]) / (2 * dr[l]);
 				
 				u_td_3_next[l][m] = C_0[l][m] * u_td_3[l][m] + 
 									C_l_left[l][m] * u_td_3[l - 1][m] + 
@@ -408,11 +409,11 @@ int main() {
 									C_m_right[l][m] * u_td_3[l][m + 1] + 
 									dt / (2.0 * dz) * (H_z[l + 1][m] * H_r[l + 1][m] * r[l + 1][m] - 
 													   H_z[l - 1][m] * H_r[l - 1][m] * r[l - 1][m]) -
-									dt / (2.0 * dr[l]) * ((P[l][m + 1] - H_r[l][m + 1] * H_y[l][m + 1]) * r[l][m + 1] -
-													      (P[l][m - 1] - H_r[l][m - 1] * H_y[l][m - 1]) * r[l][m - 1]) +
+									dt / (2.0 * dr[l]) * ((P[l][m + 1] - H_r[l][m + 1] * H_r[l][m + 1]) * r[l][m + 1] - // y -> r
+													      (P[l][m - 1] - H_r[l][m - 1] * H_r[l][m - 1]) * r[l][m - 1]) + // y -> r
 									dt * (rho[l][m] * pow(v_phi[l][m], 2) + P[l][m] - pow(H_phi[l][m], 2)) * R[l];
 
-				u_td_4_next[l][m] = C_0[l][m] * u_td_4[l][m] + 
+				u_td_4_next[l][m] = /*C_0[l][m] * u_td_4[l][m] + 
 									C_l_left[l][m] * u_td_4[l - 1][m] + 
 									C_l_right[l][m] * u_td_4[l + 1][m] +
 									C_m_left[l][m] * u_td_4[l][m - 1] +
@@ -421,7 +422,7 @@ int main() {
 													   H_phi[l - 1][m] * H_z[l - 1][m] * r[l - 1][m]) +
 									dt / (2.0 * dr[l]) * (H_phi[l][m + 1] * H_y[l][m + 1] * r[l][m + 1] -
 													      H_phi[l][m - 1] * H_y[l][m - 1] * r[l][m - 1]) +
-									dt * (- rho[l][m] * v_r[l][m] * v_phi[l][m] + H_phi[l][m] * H_r[l][m]) * R[l];
+									dt * (- rho[l][m] * v_r[l][m] * v_phi[l][m] + H_phi[l][m] * H_r[l][m]) * R[l]*/ 0;
 
 				u_td_5_next[l][m] = C_0[l][m] * u_td_5[l][m] + 
 									C_l_left[l][m] * u_td_5[l - 1][m] + 
@@ -430,8 +431,8 @@ int main() {
 									C_m_right[l][m] * u_td_5[l][m + 1] -
 									dt * p[l][m] * (1.0 / (2.0 * dz) * (v_z[l + 1][m] * r[l + 1][m] -
 																		v_z[l - 1][m] * r[l - 1][m]) + 
-													1.0 / (2.0 * dr[l]) * (v_y[l][m + 1] * r[l][m + 1] -
-																		   v_y[l][m - 1] * r[l][m - 1]));
+													1.0 / (2.0 * dr[l]) * (v_r[l][m + 1] * r[l][m + 1] - // y -> r
+																		   v_r[l][m - 1] * r[l][m - 1])); // y -> r
 
 				u_td_6_next[l][m] = C_0[l][m] * u_td_6[l][m] + 
 									C_l_left[l][m] * u_td_6[l - 1][m] + 
@@ -440,24 +441,24 @@ int main() {
 									C_m_right[l][m] * u_td_6[l][m + 1] +
 									dt / (2.0 * dz) * (H_z[l + 1][m] * v_phi[l + 1][m] - 
 													   H_z[l - 1][m] * v_phi[l - 1][m]) + 
-									dt / (2.0 * dr[l]) * (H_y[l][m + 1] * v_phi[l][m + 1] -
-													      H_y[l][m - 1] * v_phi[l][m - 1]);
+									dt / (2.0 * dr[l]) * (H_r[l][m + 1] * v_phi[l][m + 1] - // y -> r
+													      H_r[l][m - 1] * v_phi[l][m - 1]); // y -> r
 				
-				u_td_7_next[l][m] = C_0[l][m] * u_td_7[l][m] + 
+				u_td_7_next[l][m] = /*C_0[l][m] * u_td_7[l][m] + 
 									C_l_left[l][m] * u_td_7[l - 1][m] + 
 									C_l_right[l][m] * u_td_7[l + 1][m] +
 									C_m_left[l][m] * u_td_7[l][m - 1] +
 									C_m_right[l][m] * u_td_7[l][m + 1] +
 									dt / (2.0 * dr[l]) * (H_y[l][m + 1] * v_z[l][m + 1] * r[l][m + 1] -
-													      H_y[l][m - 1] * v_z[l][m - 1] * r[l][m - 1]);
+													      H_y[l][m - 1] * v_z[l][m - 1] * r[l][m - 1])*/ 0;
 
-				u_td_8_next[l][m] = C_0[l][m] * u_td_8[l][m] + 
+				u_td_8_next[l][m] = /*C_0[l][m] * u_td_8[l][m] + 
 									C_l_left[l][m] * u_td_8[l - 1][m] + 
 									C_l_right[l][m] * u_td_8[l + 1][m] +
 									C_m_left[l][m] * u_td_8[l][m - 1] +
 									C_m_right[l][m] * u_td_8[l][m + 1] + 
 									dt / (2.0 * dz) * (H_z[l + 1][m] * v_y[l + 1][m] * r[l + 1][m] - 
-													   H_z[l - 1][m] * v_y[l - 1][m] * r[l - 1][m]);
+													   H_z[l - 1][m] * v_y[l - 1][m] * r[l - 1][m])*/ 0;
 			}
 		}
 
@@ -544,8 +545,15 @@ int main() {
 		z_lst[l] = z_lst[l - 1] + dz;
 	}
 	y_lst[0] = 0;
+	/*
 	for (int m = 1; m < M_max + 1; m++) {
 		y_lst[m] = y_lst[m - 1] + dy;
+	}
+	*/
+	for (int l = 0; l < L_max + 1; l++) {
+		for (int m = 1; m < M_max + 1; m++) {
+			y_lst[m] = y_lst[m - 1] + dr[l];
+		}
 	}
 
 	for (int l = 0; l < L_max + 1; l++) {
@@ -580,7 +588,7 @@ int main() {
 	f.close();
 
 	// free memory
-/*
+
 	memory_clearing(u_td_1, L_max);
 	memory_clearing(u_td_2, L_max);
 	memory_clearing(u_td_3, L_max);
@@ -589,7 +597,7 @@ int main() {
 	memory_clearing(u_td_6, L_max);
 	memory_clearing(u_td_7, L_max);
 	memory_clearing(u_td_8, L_max);
-
+	
 	memory_clearing(u_td_1_next, L_max);
 	memory_clearing(u_td_2_next, L_max);
 	memory_clearing(u_td_3_next, L_max);
@@ -604,12 +612,12 @@ int main() {
 	memory_clearing(C_l_right, L_max);
 	memory_clearing(C_m_left, L_max);
 	memory_clearing(C_m_right, L_max);
-
-	delete [] mu_l_left;
-	delete [] mu_l_right;
-	delete [] mu_m_left;
-	delete [] mu_m_right;
-
+	
+	memory_clearing(mu_l_left, L_max);
+	memory_clearing(mu_l_right, L_max);
+	memory_clearing(mu_m_left, L_max);
+	memory_clearing(mu_m_right, L_max);
+	
 	memory_clearing(rho, L_max);
 	memory_clearing(v_r, L_max);
 	memory_clearing(v_phi, L_max);
@@ -617,12 +625,12 @@ int main() {
 	memory_clearing(p, L_max);
 	memory_clearing(P, L_max);
 	memory_clearing(H_r, L_max);
-	memory_clearing(H_r, L_max);
 	memory_clearing(H_z, L_max);
-
+	
 	memory_clearing(r, L_max);
 	memory_clearing(r_z, L_max);
 	delete [] R;
+	delete [] dr;
 
 	memory_clearing(v_y, L_max);
 	memory_clearing(H_y, L_max);
@@ -640,6 +648,6 @@ int main() {
 	memory_clearing(H_r_lst, L_max);
 	memory_clearing(H_phi_lst, L_max);
 	memory_clearing(H_z_lst, L_max);
-*/
+	
 	return 0;
 }
