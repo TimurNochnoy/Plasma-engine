@@ -330,13 +330,13 @@ int main() {
 
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
-				mu_l_left[l] = mu_0_l + (abs(v_y[l - 1][m]) + abs(v_y[l][m])) / 4.0;
-				mu_l_right[l] = mu_0_l + (abs(v_y[l][m]) + abs(v_y[l + 1][m])) / 4.0;
+				mu_l_left[l] = mu_0_l + (abs(v_z[l - 1][m]) + abs(v_z[l][m])) / 4.0;
+				mu_l_right[l] = mu_0_l + (abs(v_z[l][m]) + abs(v_z[l + 1][m])) / 4.0;
 				mu_m_left[m] = mu_0_m + (abs(v_y[l][m - 1]) + abs(v_y[l][m])) / 4.0;
 				mu_m_right[m] = mu_0_m + (abs(v_y[l][m]) + abs(v_y[l][m + 1])) / 4.0;
 
 				C_0[l][m] = 1 - dt / dz * (v_z[l + 1][m] - v_z[l - 1][m]) / 4.0 -
-								dt / dy * (v_z[l][m + 1] - v_z[l][m - 1]) / 4.0 -
+								dt / dy * (v_y[l][m + 1] - v_y[l][m - 1]) / 4.0 -
 								dt / dz * (mu_l_left[l] + mu_l_right[l]) - 
 								dt / dy * (mu_m_left[m] + mu_m_right[m]);
 				C_l_left[l][m] = dt / dz * ((v_z[l - 1][m] + v_z[l][m]) / 4.0 + mu_l_left[l]);
@@ -345,7 +345,6 @@ int main() {
 				C_m_right[l][m] = dt / dy * (- (v_y[l][m] + v_y[l][m + 1]) / 4.0 + mu_m_right[m]);
 			}
 		}
-
 		//printf("mu_l_l=%lf   mu_l_r=%lf   mu_m_l=%lf   mu_m_r=%lf   C0=%lf\n", mu_l_left[50], mu_l_right[50],  mu_m_left[50], mu_m_right[50], C_0[50][50]);
 		//printf("C_l_l=%lf   C_l_r=%lf   C_m_l=%lf   C_m_r=%lf   C0=%lf\n", C_l_left[50][50], C_l_right[50][50],  C_m_left[50][50], C_m_right[50][50], C_0[50][50]);
 		//printf("v_z=%lf   v_y=%lf   C0=%lf\n", v_z[50][50], v_y[50][50], C_0[50][50]);
