@@ -123,7 +123,7 @@ int main() {
 
 	int L_max = 80;
 	int M_max = 40;
-	int N_max = 15000;
+	int N_max = 1000;
 	
 	// U = {rho*r*R, rho*u*r*R, rho*v*r*R, rho*w*r*R, rho*energy*r*R, H_phi*R, H_z*r*R, H_y*r}
 
@@ -165,6 +165,7 @@ int main() {
 	
 	double k = 0.5;
 	double gamma = 1.67;
+	double H_z0 = 0.1;
 	double beta = 1.0;
 	double mu_0_l = 0.7;
 	double mu_0_m = 0.7;
@@ -276,7 +277,7 @@ int main() {
 			H_r[l][m] = 0;
 			H_phi[l][m] = (1 - 0.9 * l * dz) * r_0 / r[l][m];
 			//printf("%lf\n", H_phi[l][m]);
-			H_z[l][m] = 0;
+			H_z[l][m] = H_z0;
 			
 			e[l][m] = beta / (2.0 * (gamma - 1.0));
 			p[l][m] = beta / 2.0;
@@ -306,68 +307,7 @@ int main() {
 
 	for (int n = 0; n < N_max; n++) {
 		
-		// left boundary condition for current layer
-
-		for (int m = 0; m < M_max + 1; m++) {
-			rho[0][m] = 1.0;
-			v_phi[0][m] = 0;
-			//v_y[0][m] = 0;
-			v_r[0][m] = v_z[0][m] * r_z[0][m];
-			H_z[0][m] = 0;
-			//H_y[0][m] = 0;
-			H_r[0][m] = H_z[0][m] * r_z[0][m];
-			H_phi[0][m] = r_0 / r[0][m];
-			//printf("%lf\n", H_phi[0][m]);
-			e[0][m] = beta / (2.0 * (gamma - 1.0)) * pow(rho[0][m], gamma - 1.0);
-		}
-
-		// up an down boundary condition for current layer
-
-		for (int l = 0; l < L_max + 1; l++) {
-			/*v_y[l][0] = 0;
-			v_y[l][M_max] = 0;
-			H_y[l][0] = 0;
-			H_y[l][M_max] = 0;*/
-			v_r[l][0] = v_z[l][0] * r_z[l][0];
-			v_r[l][M_max] = v_z[l][M_max] * r_z[l][M_max];
-			H_r[l][0] = H_z[l][0] * r_z[l][0];
-			H_r[l][M_max] = H_z[l][M_max] * r_z[l][M_max];
-		}
 		
-		// left boundary condition for current layer for transport part
-
-		for (int m = 0; m < M_max + 1; m++) {
-			u_td_1_next[0][m] = rho[0][m] * r[0][m];
-			u_td_2_next[0][m] = rho[0][m] * v_z[0][m] * r[0][m];
-			u_td_3_next[0][m] = rho[0][m] * v_r[0][m] * r[0][m];
-			u_td_4_next[0][m] = rho[0][m] * v_phi[0][m] * r[0][m];
-			u_td_5_next[0][m] = rho[0][m] * e[0][m] * r[0][m];
-			u_td_6_next[0][m] = H_phi[0][m];
-			u_td_7_next[0][m] = H_z[0][m] * r[0][m];
-			u_td_8_next[0][m] = H_r[0][m] * r[0][m]; // y -> r
-		}
-
-		// up and down boundary condition for current layer for transport part
-
-		for (int l = 0; l < L_max + 1; l++) {
-			u_td_1_next[l][0] = rho[l][0] * r[l][0];
-			u_td_2_next[l][0] = rho[l][0] * v_z[l][0] * r[l][0];
-			u_td_3_next[l][0] = rho[l][0] * v_r[l][0] * r[l][0];
-			u_td_4_next[l][0] = rho[l][0] * v_phi[l][0] * r[l][0];
-			u_td_5_next[l][0] = rho[l][0] * e[l][0] * r[l][0];
-			u_td_6_next[l][0] = H_phi[l][0];
-			u_td_7_next[l][0] = H_z[l][0] * r[l][0];
-			u_td_8_next[l][0] = H_r[l][0] * r[l][0]; // y -> r
-
-			u_td_1_next[l][M_max] = rho[l][M_max] * r[l][M_max];
-			u_td_2_next[l][M_max] = rho[l][M_max] * v_z[l][M_max] * r[l][M_max];
-			u_td_3_next[l][M_max] = rho[l][M_max] * v_r[l][M_max] * r[l][M_max];
-			u_td_4_next[l][M_max] = rho[l][M_max] * v_phi[l][M_max] * r[l][M_max];
-			u_td_5_next[l][M_max] = rho[l][M_max] * e[l][M_max] * r[l][M_max];
-			u_td_6_next[l][M_max] = H_phi[l][M_max];
-			u_td_7_next[l][M_max] = H_z[l][M_max] * r[l][M_max];
-			u_td_8_next[l][M_max] = H_r[l][M_max] * r[l][M_max]; // y -> r
-		}
 
 		// constants for current layer
 		
@@ -519,11 +459,106 @@ int main() {
 			}
 		}
 
+
+
+
+		// left boundary condition for current layer
+
+		for (int m = 0; m < M_max + 1; m++) {
+
+			// because numbers
+
+			rho[0][m] = 1.0;
+			v_phi[0][m] = 0;
+			//v_y[0][m] = 0;
+			//v_r[0][m] = v_z[0][m] * r_z[0][m];
+			H_z[0][m] = H_z0;
+			//H_y[0][m] = 0;
+			//H_r[0][m] = H_z[0][m] * r_z[0][m];
+			H_phi[0][m] = r_0 / r[0][m];
+			//printf("%lf\n", H_phi[0][m]);
+			e[0][m] = beta / (2.0 * (gamma - 1.0)) * pow(rho[0][m], gamma - 1.0);
+		}
+
+		// left boundary condition for current layer for transport part
+
+		for (int m = 0; m < M_max + 1; m++) {
+			u_td_1_next[0][m] = rho[0][m] * r[0][m];
+			u_td_2_next[0][m] = /*rho[0][m] * v_z[0][m] * r[0][m]*/ u_td_2_next[1][m];
+			u_td_3_next[0][m] = /*rho[0][m] * v_r[0][m] * r[0][m]*/ u_td_2_next[0][m] * r_z[0][m];
+			u_td_4_next[0][m] = rho[0][m] * v_phi[0][m] * r[0][m];
+			u_td_5_next[0][m] = rho[0][m] * e[0][m] * r[0][m];
+			u_td_6_next[0][m] = H_phi[0][m];
+			u_td_7_next[0][m] = H_z[0][m] * r[0][m];
+			u_td_8_next[0][m] = /*H_r[0][m] * r[0][m]*/ u_td_7_next[0][m] * r_z[0][m]; // y -> r
+		}
+
+		// NEW COND
+
+		for (int l = 1; l < L_max + 1; l++) {
+			u_td_1_next[l][0] = u_td_1_next[l][1];
+			u_td_2_next[l][0] = u_td_2_next[l][1];
+			u_td_3_next[l][0] = /*u_td_3_next[l][1]*/ u_td_2_next[l][0] * r_z[l][0];
+			u_td_4_next[l][0] = u_td_4_next[l][1];
+			u_td_5_next[l][0] = u_td_5_next[l][1];
+			u_td_6_next[l][0] = u_td_6_next[l][1];
+			u_td_7_next[l][0] = u_td_7_next[l][1];
+			u_td_8_next[l][0] = /*u_td_8_next[l][1]*/ u_td_7_next[l][0] * r_z[l][0];
+
+			u_td_1_next[l][M_max] = u_td_1_next[l][M_max - 1];
+			u_td_2_next[l][M_max] = u_td_2_next[l][M_max - 1];
+			u_td_3_next[l][M_max] = /*u_td_3_next[l][M_max - 1]*/ u_td_2_next[l][M_max] * r_z[l][M_max];
+			u_td_4_next[l][M_max] = u_td_4_next[l][M_max - 1];
+			u_td_5_next[l][M_max] = u_td_5_next[l][M_max - 1];
+			u_td_6_next[l][M_max] = u_td_6_next[l][M_max - 1];
+			u_td_7_next[l][M_max] = u_td_7_next[l][M_max - 1];
+			u_td_8_next[l][M_max] = /*u_td_8_next[l][M_max - 1]*/ u_td_7_next[l][M_max] * r_z[l][M_max];
+		}
+
+		//// up an down boundary condition for current layer
+
+		//for (int l = 0; l < L_max + 1; l++) {
+		//	/*v_y[l][0] = 0;
+		//	v_y[l][M_max] = 0;
+		//	H_y[l][0] = 0;
+		//	H_y[l][M_max] = 0;*/
+		//	v_r[l][0] = v_z[l][0] * r_z[l][0];
+		//	v_r[l][M_max] = v_z[l][M_max] * r_z[l][M_max];
+		//	H_r[l][0] = H_z[l][0] * r_z[l][0];
+		//	H_r[l][M_max] = H_z[l][M_max] * r_z[l][M_max];
+		//}
+		
+
+		// up and down boundary condition for current layer for transport part
+
+		//for (int l = 0; l < L_max + 1; l++) {
+		//	u_td_1_next[l][0] = rho[l][0] * r[l][0];
+		//	u_td_2_next[l][0] = rho[l][0] * v_z[l][0] * r[l][0];
+		//	u_td_3_next[l][0] = rho[l][0] * v_r[l][0] * r[l][0];
+		//	u_td_4_next[l][0] = rho[l][0] * v_phi[l][0] * r[l][0];
+		//	u_td_5_next[l][0] = rho[l][0] * e[l][0] * r[l][0];
+		//	u_td_6_next[l][0] = H_phi[l][0];
+		//	u_td_7_next[l][0] = H_z[l][0] * r[l][0];
+		//	u_td_8_next[l][0] = H_r[l][0] * r[l][0]; // y -> r
+
+		//	u_td_1_next[l][M_max] = rho[l][M_max] * r[l][M_max];
+		//	u_td_2_next[l][M_max] = rho[l][M_max] * v_z[l][M_max] * r[l][M_max];
+		//	u_td_3_next[l][M_max] = rho[l][M_max] * v_r[l][M_max] * r[l][M_max];
+		//	u_td_4_next[l][M_max] = rho[l][M_max] * v_phi[l][M_max] * r[l][M_max];
+		//	u_td_5_next[l][M_max] = rho[l][M_max] * e[l][M_max] * r[l][M_max];
+		//	u_td_6_next[l][M_max] = H_phi[l][M_max];
+		//	u_td_7_next[l][M_max] = H_z[l][M_max] * r[l][M_max];
+		//	u_td_8_next[l][M_max] = H_r[l][M_max] * r[l][M_max]; // y -> r
+		//}
+
+
+
+
 		//printf("%lf %lf\n", u_td_1_next[50][50], C_0[50][50]);
 
 		// right boundary condition for current layer for transport part
 
-		for (int m = 0; m < M_max; m++) {
+		for (int m = 1; m < M_max; m++) {
 			u_td_1_next[L_max][m] = u_td_1_next[L_max - 1][m];
 			u_td_2_next[L_max][m] = u_td_2_next[L_max - 1][m];
 			u_td_3_next[L_max][m] = u_td_3_next[L_max - 1][m];
@@ -536,25 +571,6 @@ int main() {
 
 
 
-		for (int l = 0; l < L_max; l++) {
-			u_td_1_next[l][0] = u_td_1_next[l][1];
-			u_td_2_next[l][0] = u_td_2_next[l][1];
-			u_td_3_next[l][0] = u_td_3_next[l][1];
-			u_td_4_next[l][0] = u_td_4_next[l][1];
-			u_td_5_next[l][0] = u_td_5_next[l][1];
-			u_td_6_next[l][0] = u_td_6_next[l][1];
-			u_td_7_next[l][0] = u_td_7_next[l][1];
-			u_td_8_next[l][0] = u_td_8_next[l][1];
-
-			u_td_1_next[l][M_max] = u_td_1_next[l][M_max - 1];
-			u_td_2_next[l][M_max] = u_td_2_next[l][M_max - 1];
-			u_td_3_next[l][M_max] = u_td_3_next[l][M_max - 1];
-			u_td_4_next[l][M_max] = u_td_4_next[l][M_max - 1];
-			u_td_5_next[l][M_max] = u_td_5_next[l][M_max - 1];
-			u_td_6_next[l][M_max] = u_td_6_next[l][M_max - 1];
-			u_td_7_next[l][M_max] = u_td_7_next[l][M_max - 1];
-			u_td_8_next[l][M_max] = u_td_8_next[l][M_max - 1];
-		}
 
 		
 		// update parameters of problem
