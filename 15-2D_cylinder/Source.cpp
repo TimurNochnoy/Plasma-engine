@@ -20,10 +20,6 @@ void memory_clearing(double **arr, int rows) {
 	delete [] arr;
 }
 
-int round(double d) {
-	return (int)floor(d + 0.5);
-}
-
 double max_for_dt(double **mu_l, double **mu_m, double dz, double* dr, double L, double M) {
 	double value;
 	double maxim = 0.0;
@@ -39,6 +35,32 @@ double max_for_dt(double **mu_l, double **mu_m, double dz, double* dr, double L,
 	}
 
 	return maxim;
+}
+
+double max_array(double **array, double L, double M) {
+	double maxim = 0.0;
+
+	for (int l = 0; l < L + 1; l++) {
+		for (int m = 0; m < M + 1; m++) {
+			if (maxim < std::fabs(array[l][m])) {
+				maxim = std::fabs(array[l][m]);
+			}
+		}
+	}
+
+	return maxim;
+}
+
+double min_array(double *array, double L) {
+	double minim = array[0];
+
+	for (int l = 1; l < L; l++) {
+		if (minim > array[l]) {
+			minim = array[l];
+		}
+	}
+
+	return minim;
 }
 
 int sign(double n) {
@@ -101,7 +123,7 @@ int main() {
 
 	int L_max = 80;
 	int M_max = 40;
-	int N_max = 80000;
+	int N_max = 15000;
 	
 	// U = {rho*r*R, rho*u*r*R, rho*v*r*R, rho*w*r*R, rho*energy*r*R, H_phi*R, H_z*r*R, H_y*r}
 
@@ -212,15 +234,6 @@ int main() {
 		dr[l] = 0;
 	}
 
-	for (int l = 0; l < L_max + 1; l++) {
-		for (int m = 0; m < M_max + 1; m++) {
-			mu_l_left[l][m] = 0;
-			mu_l_right[l][m] = 0;
-			mu_m_left[l][m] = 0;
-			mu_m_right[l][m] = 0;
-		}
-	}
-
 	// grid steps
 
 	double dz = 1.0 / L_max;
@@ -240,6 +253,19 @@ int main() {
 	}
 
 	//printf("%lf\n", r[50][50]);
+
+	//for (int m = 0; m < M_max + 1; m++) {
+	//	H_z[L_max][m] = 0;
+	//}
+	//for (int l = 0; l < L_max + 1; l++) {
+	//	H_z[l][M_max] = H_z[L_max][M_max] * r[L_max][M_max] * dr[L_max] / r[l][M_max] / dr[l];
+	//}
+	//for (int l = 0; l < L_max; l++) {
+	//	for (int m = M_max; m >= 0; m--) {
+	//		H_z[l][m] = 2 * H_z[L_max][m] * ((r[L_max][m] + r[L_max][m + 1]) * dr[L_max] / (r[l][m] + r[l][m + 1]) / dr[l]) - H_z[l][m + 1];
+	//	}
+	//}
+
 
 	for (int l = 0; l < L_max + 1; l++) {
 		for (int m = 0; m < M_max + 1; m++) {
@@ -272,7 +298,7 @@ int main() {
 			u_td_5[l][m] = rho[l][m] * e[l][m] * r[l][m];
 			u_td_6[l][m] = H_phi[l][m];
 			u_td_7[l][m] = H_z[l][m] * r[l][m];
-			u_td_8[l][m] = H_r[l][m] * r[l][m]; // y -> r
+			u_td_8[l][m] = H_r[l][m] * r[l][m];
 		}
 	}
 
@@ -285,21 +311,27 @@ int main() {
 		for (int m = 0; m < M_max + 1; m++) {
 			rho[0][m] = 1.0;
 			v_phi[0][m] = 0;
-			v_y[0][m] = 0;
-			H_y[0][m] = 0;
+			//v_y[0][m] = 0;
+			v_r[0][m] = v_z[0][m] * r_z[0][m];
+			H_z[0][m] = 0;
+			//H_y[0][m] = 0;
+			H_r[0][m] = H_z[0][m] * r_z[0][m];
 			H_phi[0][m] = r_0 / r[0][m];
 			//printf("%lf\n", H_phi[0][m]);
-			H_z[0][m] = 0;
 			e[0][m] = beta / (2.0 * (gamma - 1.0)) * pow(rho[0][m], gamma - 1.0);
 		}
 
 		// up an down boundary condition for current layer
 
 		for (int l = 0; l < L_max + 1; l++) {
-			v_y[l][0] = 0;
+			/*v_y[l][0] = 0;
 			v_y[l][M_max] = 0;
 			H_y[l][0] = 0;
-			H_y[l][M_max] = 0;
+			H_y[l][M_max] = 0;*/
+			v_r[l][0] = v_z[l][0] * r_z[l][0];
+			v_r[l][M_max] = v_z[l][M_max] * r_z[l][M_max];
+			H_r[l][0] = H_z[l][0] * r_z[l][0];
+			H_r[l][M_max] = H_z[l][M_max] * r_z[l][M_max];
 		}
 		
 		// left boundary condition for current layer for transport part
@@ -343,14 +375,22 @@ int main() {
 			for (int m = 1; m < M_max; m++) {
 				mu_l_left[l][m] = mu_0_l + (fabs(v_z[l - 1][m]) + fabs(v_z[l][m])) / 4.0;
 				mu_l_right[l][m] = mu_0_l + (fabs(v_z[l][m]) + fabs(v_z[l + 1][m])) / 4.0;
-				mu_m_left[l][m] = mu_0_m + (fabs(v_r[l][m - 1]) + fabs(v_r[l][m])) / 4.0;
-				mu_m_right[l][m] = mu_0_m + (fabs(v_r[l][m]) + fabs(v_r[l][m + 1])) / 4.0;
+				mu_m_left[l][m] = mu_0_m + (fabs(v_y[l][m - 1]) + fabs(v_y[l][m])) / 4.0; // y -> r
+				mu_m_right[l][m] = mu_0_m + (fabs(v_y[l][m]) + fabs(v_y[l][m + 1])) / 4.0; // y -> r
 			}
 		}
 
 		// update tau
 		
-		dt = k * dz / (2.0 * max_for_dt(mu_l_right, mu_m_right, dz, dr, L_max, M_max));
+		double* tmp;
+		tmp = new double [L_max + 1];
+
+		for (int l = 0; l < L_max + 1; l++) {
+			tmp[l] = dr[l] / (dr[l] * max_array(mu_l_left, L_max, M_max) + dz * max_array(mu_m_left, L_max, M_max));
+		}
+		dt = k * dz * min_array(tmp, L_max + 1) / 2.0;
+
+		delete [] tmp;
 		//printf("%lf\n", dt);
 		// found zero value in dt
 
@@ -358,7 +398,7 @@ int main() {
 
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
-				C_0[l][m] = 1 - dt / dz * (v_z[l + 1][m] - v_z[l - 1][m]) / 4.0 - dt / dr[l] * (v_r[l][m + 1] - v_r[l][m - 1]) / 4.0 // y -> r
+				C_0[l][m] = 1 - dt / dz * (v_z[l + 1][m] - v_z[l - 1][m]) / 4.0 - dt / dr[l] * (v_y[l][m + 1] - v_y[l][m - 1]) / 4.0 // y -> r
 							  - dt / dz * (mu_l_left[l][m] + mu_l_right[l][m]) - dt / dr[l] * (mu_m_left[l][m] + mu_m_right[l][m]);
 				C_l_left[l][m] = dt / dz * ((v_z[l - 1][m] + v_z[l][m]) / 4.0 + mu_l_left[l][m]);
 				C_l_right[l][m] = dt / dz * (- (v_z[l][m] + v_z[l + 1][m]) / 4.0 + mu_l_right[l][m]);
@@ -381,6 +421,15 @@ int main() {
 		//printf("\n\n");
 
 
+
+
+		//printf("v_z[0][20]=%lf   v_z[40][0]=%lf   v_z[40][40]=%lf\n", v_z[0][20], v_z[40][0], v_z[40][40]);
+		//printf("rho[0][20]=%lf   rho[40][0]=%lf   rho[40][40]=%lf\n", rho[0][20], rho[40][0], rho[40][40]);
+
+
+
+
+
 		// filling central points of grid for transport part
 
 		for (int l = 1; l < L_max; l++) {
@@ -398,10 +447,18 @@ int main() {
 									C_m_right[l][m] * u_td_2[l][m + 1] -
 									dt / (2.0 * dz) * ((P[l + 1][m] - pow(H_z[l + 1][m], 2)) * r[l + 1][m] - 
 													   (P[l - 1][m] - pow(H_z[l - 1][m], 2)) * r[l - 1][m]) +
-									//dt / (2.0 * dr[l]) * ((r_z[l][m + 1] * P[l][m + 1] + H_z[l][m + 1] * H_y[l][m + 1]) * r[l][m + 1] - 
-										//			      (r_z[l][m - 1] * P[l][m - 1] + H_z[l][m - 1] * H_y[l][m - 1]) * r[l][m - 1]);
-										+ dt * (H_z[l][m + 1] * H_r[l][m + 1] * r[l][m] - H_z[l][m - 1] * H_r[l][m - 1] * r[l][m]) / (2 * dr[l]);
-				
+									dt / (2 * dr[l]) * (H_z[l][m + 1] * H_r[l][m + 1] * r[l][m + 1] - 
+														H_z[l][m - 1] * H_r[l][m - 1] * r[l][m - 1]);
+
+				//printf("v_z[0][20]=%lf   v_z[40][0]=%lf   v_z[40][40]=%lf\n", v_z[0][20], v_z[40][0], v_z[40][40]);
+
+				//printf("u_td_2_next[0][20]=%lf   u_td_2_next[40][0]=%lf   u_td_2_next[40][40]=%lf\n", u_td_2_next[0][20], u_td_2_next[40][0], u_td_2_next[40][40]);
+				/*printf("u_td_2_next[0][20]=%lf\n", dt / (2.0 * dz) * ((P[l + 1][m] - pow(H_z[l + 1][m], 2)) * r[l + 1][m] - 
+													   (P[l - 1][m] - pow(H_z[l - 1][m], 2)) * r[l - 1][m]) +
+									dt / (2 * dr[l]) * (H_z[l][m + 1] * H_r[l][m + 1] * r[l][m + 1] - 
+														H_z[l][m - 1] * H_r[l][m - 1] * r[l][m - 1]));*/
+
+
 				u_td_3_next[l][m] = C_0[l][m] * u_td_3[l][m] + 
 									C_l_left[l][m] * u_td_3[l - 1][m] + 
 									C_l_right[l][m] * u_td_3[l + 1][m] +
@@ -409,20 +466,20 @@ int main() {
 									C_m_right[l][m] * u_td_3[l][m + 1] + 
 									dt / (2.0 * dz) * (H_z[l + 1][m] * H_r[l + 1][m] * r[l + 1][m] - 
 													   H_z[l - 1][m] * H_r[l - 1][m] * r[l - 1][m]) -
-									dt / (2.0 * dr[l]) * ((P[l][m + 1] - H_r[l][m + 1] * H_r[l][m + 1]) * r[l][m + 1] - // y -> r
-													      (P[l][m - 1] - H_r[l][m - 1] * H_r[l][m - 1]) * r[l][m - 1]) + // y -> r
-									dt * (rho[l][m] * pow(v_phi[l][m], 2) + P[l][m] - pow(H_phi[l][m], 2)) * R[l];
+									dt / (2.0 * dr[l]) * ((P[l][m + 1] - pow(H_r[l][m + 1], 2)) * r[l][m + 1] - // y -> r
+													      (P[l][m - 1] - pow(H_r[l][m - 1], 2)) * r[l][m - 1]) + // y -> r
+									dt * (rho[l][m] * pow(v_phi[l][m], 2) + P[l][m] - pow(H_phi[l][m], 2))/* * R[l]*/;
 
-				u_td_4_next[l][m] = /*C_0[l][m] * u_td_4[l][m] + 
+				u_td_4_next[l][m] = C_0[l][m] * u_td_4[l][m] + 
 									C_l_left[l][m] * u_td_4[l - 1][m] + 
 									C_l_right[l][m] * u_td_4[l + 1][m] +
 									C_m_left[l][m] * u_td_4[l][m - 1] +
 									C_m_right[l][m] * u_td_4[l][m + 1] + 
 									dt / (2.0 * dz) * (H_phi[l + 1][m] * H_z[l + 1][m] * r[l + 1][m] - 
 													   H_phi[l - 1][m] * H_z[l - 1][m] * r[l - 1][m]) +
-									dt / (2.0 * dr[l]) * (H_phi[l][m + 1] * H_y[l][m + 1] * r[l][m + 1] -
-													      H_phi[l][m - 1] * H_y[l][m - 1] * r[l][m - 1]) +
-									dt * (- rho[l][m] * v_r[l][m] * v_phi[l][m] + H_phi[l][m] * H_r[l][m]) * R[l]*/ 0;
+									dt / (2.0 * dr[l]) * (H_phi[l][m + 1] * H_r[l][m + 1] * r[l][m + 1] - // y -> r
+													      H_phi[l][m - 1] * H_r[l][m - 1] * r[l][m - 1]) + // y -> r
+									dt * (- rho[l][m] * r[l][m] * v_phi[l][m] + H_phi[l][m] * H_r[l][m])/* * R[l]*/;
 
 				u_td_5_next[l][m] = C_0[l][m] * u_td_5[l][m] + 
 									C_l_left[l][m] * u_td_5[l - 1][m] + 
@@ -444,21 +501,21 @@ int main() {
 									dt / (2.0 * dr[l]) * (H_r[l][m + 1] * v_phi[l][m + 1] - // y -> r
 													      H_r[l][m - 1] * v_phi[l][m - 1]); // y -> r
 				
-				u_td_7_next[l][m] = /*C_0[l][m] * u_td_7[l][m] + 
+				u_td_7_next[l][m] = C_0[l][m] * u_td_7[l][m] + 
 									C_l_left[l][m] * u_td_7[l - 1][m] + 
 									C_l_right[l][m] * u_td_7[l + 1][m] +
 									C_m_left[l][m] * u_td_7[l][m - 1] +
 									C_m_right[l][m] * u_td_7[l][m + 1] +
-									dt / (2.0 * dr[l]) * (H_y[l][m + 1] * v_z[l][m + 1] * r[l][m + 1] -
-													      H_y[l][m - 1] * v_z[l][m - 1] * r[l][m - 1])*/ 0;
+									dt / (2.0 * dr[l]) * (H_r[l][m + 1] * v_z[l][m + 1] * r[l][m + 1] - // y -> r
+													      H_r[l][m - 1] * v_z[l][m - 1] * r[l][m - 1]); // y -> r
 
-				u_td_8_next[l][m] = /*C_0[l][m] * u_td_8[l][m] + 
+				u_td_8_next[l][m] = C_0[l][m] * u_td_8[l][m] + 
 									C_l_left[l][m] * u_td_8[l - 1][m] + 
 									C_l_right[l][m] * u_td_8[l + 1][m] +
 									C_m_left[l][m] * u_td_8[l][m - 1] +
 									C_m_right[l][m] * u_td_8[l][m + 1] + 
-									dt / (2.0 * dz) * (H_z[l + 1][m] * v_y[l + 1][m] * r[l + 1][m] - 
-													   H_z[l - 1][m] * v_y[l - 1][m] * r[l - 1][m])*/ 0;
+									dt / (2.0 * dz) * (H_z[l + 1][m] * v_r[l + 1][m] * r[l + 1][m] - // y -> r
+													   H_z[l - 1][m] * v_r[l - 1][m] * r[l - 1][m]); // y -> r
 			}
 		}
 
@@ -476,6 +533,29 @@ int main() {
 			u_td_7_next[L_max][m] = u_td_7_next[L_max - 1][m];
 			u_td_8_next[L_max][m] = u_td_8_next[L_max - 1][m];
 		}
+
+
+
+		for (int l = 0; l < L_max; l++) {
+			u_td_1_next[l][0] = u_td_1_next[l][1];
+			u_td_2_next[l][0] = u_td_2_next[l][1];
+			u_td_3_next[l][0] = u_td_3_next[l][1];
+			u_td_4_next[l][0] = u_td_4_next[l][1];
+			u_td_5_next[l][0] = u_td_5_next[l][1];
+			u_td_6_next[l][0] = u_td_6_next[l][1];
+			u_td_7_next[l][0] = u_td_7_next[l][1];
+			u_td_8_next[l][0] = u_td_8_next[l][1];
+
+			u_td_1_next[l][M_max] = u_td_1_next[l][M_max - 1];
+			u_td_2_next[l][M_max] = u_td_2_next[l][M_max - 1];
+			u_td_3_next[l][M_max] = u_td_3_next[l][M_max - 1];
+			u_td_4_next[l][M_max] = u_td_4_next[l][M_max - 1];
+			u_td_5_next[l][M_max] = u_td_5_next[l][M_max - 1];
+			u_td_6_next[l][M_max] = u_td_6_next[l][M_max - 1];
+			u_td_7_next[l][M_max] = u_td_7_next[l][M_max - 1];
+			u_td_8_next[l][M_max] = u_td_8_next[l][M_max - 1];
+		}
+
 		
 		// update parameters of problem
 
@@ -516,76 +596,61 @@ int main() {
 
 	// checkout
 
-	double *z_lst = (double *)malloc((L_max + 1) * sizeof(double));
-	double *y_lst = (double *)malloc((M_max + 1) * sizeof(double));
-
-	double **rho_lst;
-	double **v_r_lst;
-	double **v_phi_lst;
-	double **v_z_lst;
-	double **e_lst;
-	double **p_lst;
-	double **P_lst;
-	double **H_r_lst;
-	double **H_phi_lst;
-	double **H_z_lst;
-	memory_allocation(rho_lst, L_max, M_max);
-	memory_allocation(v_r_lst, L_max, M_max);
-	memory_allocation(v_phi_lst, L_max, M_max);
-	memory_allocation(v_z_lst, L_max, M_max);
-	memory_allocation(e_lst, L_max, M_max);
-	memory_allocation(p_lst, L_max, M_max);
-	memory_allocation(P_lst, L_max, M_max);
-	memory_allocation(H_r_lst, L_max, M_max);
-	memory_allocation(H_phi_lst, L_max, M_max);
-	memory_allocation(H_z_lst, L_max, M_max);
-
-	z_lst[0] = 0;
-	for (int l = 1; l < L_max + 1; l++) {
-		z_lst[l] = z_lst[l - 1] + dz;
-	}
-	y_lst[0] = 0;
 	/*
-	for (int m = 1; m < M_max + 1; m++) {
-		y_lst[m] = y_lst[m - 1] + dy;
+	std :: ofstream out0("Data/grid.txt");
+	for (int m = M_max; m >= 0; m--) {
+		for (int l = 0; l < L_max + 1; l++) {
+			out0 << r[l][m] << "; ";
+		}
+		out0 << "\n\n";
 	}
+	
+	std :: ofstream out1("Data/dr.txt");
+	for (int m = M_max; m >= 0; m--) {
+		for (int l = 0; l < L_max + 1; l++) {
+			out1 << dr[l] << "   ";
+		}
+		out1 << "\n\n";
+	}
+	
+	out0.close();
+	out1.close();
 	*/
-	for (int l = 0; l < L_max + 1; l++) {
-		for (int m = 1; m < M_max + 1; m++) {
-			y_lst[m] = y_lst[m - 1] + dr[l];
-		}
-	}
-
-	for (int l = 0; l < L_max + 1; l++) {
-		for (int m = 0; m < M_max + 1; m++) {
-			rho_lst[l][m] = u_td_1_next[l][m] / r[l][m];
-			v_r_lst[l][m] = u_td_3_next[l][m] / u_td_1_next[l][m];
-			v_phi_lst[l][m] = u_td_4_next[l][m] / u_td_1_next[l][m];
-			v_z_lst[l][m] = u_td_2_next[l][m] / u_td_1_next[l][m];
-
-			H_phi_lst[l][m] = u_td_6_next[l][m];
-			H_z_lst[l][m] = u_td_7_next[l][m] / r[l][m];
-			H_r_lst[l][m] = H_y[l][m] + H_z[l][m] * r_z[l][m];
-
-			e_lst[l][m] = u_td_5_next[l][m] / u_td_1_next[l][m];
-			p_lst[l][m] = (gamma - 1) * rho[l][m] * e[l][m];
-			P_lst[l][m] = p[l][m] + 1.0 / 2.0 * (pow(H_z[l][m], 2) + pow(H_r[l][m], 2) + pow(H_phi[l][m], 2));
-		}
-	}
 
 	// output results in file
 
-	std :: ofstream f("data_MGD_CPP.txt");
-
-	for (int l = 0; l < L_max + 1; l++) {
-		for (int m = 0; m < M_max + 1; m++) {
-			f << z_lst[l] << " " << y_lst[m] << " " << rho_lst[l][m] << " " << v_r_lst[l][m] << " " <<
-				 v_phi_lst[l][m] << " " << v_z_lst[l][m] << " " << H_phi_lst[l][m] << " " << H_z_lst[l][m] << " " <<
-				 H_r_lst[l][m] << " " << e_lst[l][m] << " " << p_lst[l][m] << " " << P_lst[l][m] << " " << "\n";
+	std :: ofstream out2("Res.plt");
+	int np = (L_max + 1) * (M_max + 1);
+	int ne = L_max * M_max;
+	double hfr;
+	out2 << "VARIABLES=\n";
+	out2 << "\"X\"\n\"Y\"\n\"Rho\"\n\"Vz\"\n\"Vr\"\n\"Vl\"\n\"Vphi\"\n\"Energy\"\n\"Hz\"\n\"Hr\"\n\"Hphi*r\"\n\"Hphi\"\n";
+	out2 << "ZONE \n F=FEPOINT, ET=Quadrilateral, N=" << np << " E=" << ne << "\n ";
+	for (int m = 0; m < M_max + 1; m++) {
+		for (int l = 0; l < L_max + 1; l++) {
+			hfr = H_phi[l][m] * r[l][m];
+			out2 << l * dz << " " << r[l][m] << " " << rho[l][m] << " " << 
+				v_z[l][m] << " " << v_r[l][m] << " " << std::sqrt(v_z[l][m] * v_z[l][m] + v_r[l][m] * v_r[l][m]) << " " << 
+				v_phi[l][m] << " " << e[l][m] << " " << H_z[l][m] << " " << H_r[l][m] << " " << hfr << " " << H_phi[l][m] << "\n";
 		}
 	}
 
-	f.close();
+	int i1 = 0;
+	int i2 = 0;
+	int i3 = 0;
+	int i4 = 0;
+	
+	for (int m = 0; m < M_max; m++) {
+		for (int l = 0; l < L_max; l++) {
+			i1 = l + m * (L_max + 1) + 1;
+			i2 = l + 1 + m * (L_max + 1) + 1;
+			i3 = l + 1 + (m + 1) * (L_max + 1) + 1;
+			i4 = l + (m + 1) * (L_max + 1) + 1;
+			out2 << i1 << " " << i2 << " " << i3 << " " << i4 << "\n";
+		}
+	}
+
+	out2.close();
 
 	// free memory
 
@@ -634,20 +699,6 @@ int main() {
 
 	memory_clearing(v_y, L_max);
 	memory_clearing(H_y, L_max);
-
-	delete [] z_lst;
-	delete [] y_lst;
-
-	memory_clearing(rho_lst, L_max);
-	memory_clearing(v_r_lst, L_max);
-	memory_clearing(v_phi_lst, L_max);
-	memory_clearing(v_z_lst, L_max);
-	memory_clearing(e_lst, L_max);
-	memory_clearing(p_lst, L_max);
-	memory_clearing(P_lst, L_max);
-	memory_clearing(H_r_lst, L_max);
-	memory_clearing(H_phi_lst, L_max);
-	memory_clearing(H_z_lst, L_max);
 	
 	return 0;
 }
