@@ -145,7 +145,7 @@ int main() {
 
 	int L_max = 80;
 	int M_max = 40;
-	int N_max = 10000;
+	int N_max = 12000;
 	
 	// u = {rho*r, rho*r*v_z, rho*r*v_r, rho*r*v_phi, rho*r*energy,  H_phi, H_z*r, H_r*r}
 
@@ -290,7 +290,7 @@ int main() {
 	double k = 0.5;
 	double gamma = 1.67;
 	double beta = 1.0;
-	double H_z0 = 0;
+	double H_z0 = 0.1;
 
 	double mu_0_l = 0.7;
 	double mu_0_m = 0.7;
@@ -395,6 +395,74 @@ int main() {
 	memory_allocation(Q_minus_6, L_max, M_max);
 	memory_allocation(Q_minus_7, L_max, M_max);
 	memory_allocation(Q_minus_8, L_max, M_max);
+
+	double **Q1_plus_1;
+	double **Q1_plus_2;
+	double **Q1_plus_3;
+	double **Q1_plus_4;
+	double **Q1_plus_5;
+	double **Q1_plus_6;
+	double **Q1_plus_7;
+	double **Q1_plus_8;
+	memory_allocation(Q1_plus_1, L_max, M_max);
+	memory_allocation(Q1_plus_2, L_max, M_max);
+	memory_allocation(Q1_plus_3, L_max, M_max);
+	memory_allocation(Q1_plus_4, L_max, M_max);
+	memory_allocation(Q1_plus_5, L_max, M_max);
+	memory_allocation(Q1_plus_6, L_max, M_max);
+	memory_allocation(Q1_plus_7, L_max, M_max);
+	memory_allocation(Q1_plus_8, L_max, M_max);
+
+	double **Q1_minus_1;
+	double **Q1_minus_2;
+	double **Q1_minus_3;
+	double **Q1_minus_4;
+	double **Q1_minus_5;
+	double **Q1_minus_6;
+	double **Q1_minus_7;
+	double **Q1_minus_8;
+	memory_allocation(Q1_minus_1, L_max, M_max);
+	memory_allocation(Q1_minus_2, L_max, M_max);
+	memory_allocation(Q1_minus_3, L_max, M_max);
+	memory_allocation(Q1_minus_4, L_max, M_max);
+	memory_allocation(Q1_minus_5, L_max, M_max);
+	memory_allocation(Q1_minus_6, L_max, M_max);
+	memory_allocation(Q1_minus_7, L_max, M_max);
+	memory_allocation(Q1_minus_8, L_max, M_max);
+
+	double **Q2_plus_1;
+	double **Q2_plus_2;
+	double **Q2_plus_3;
+	double **Q2_plus_4;
+	double **Q2_plus_5;
+	double **Q2_plus_6;
+	double **Q2_plus_7;
+	double **Q2_plus_8;
+	memory_allocation(Q2_plus_1, L_max, M_max);
+	memory_allocation(Q2_plus_2, L_max, M_max);
+	memory_allocation(Q2_plus_3, L_max, M_max);
+	memory_allocation(Q2_plus_4, L_max, M_max);
+	memory_allocation(Q2_plus_5, L_max, M_max);
+	memory_allocation(Q2_plus_6, L_max, M_max);
+	memory_allocation(Q2_plus_7, L_max, M_max);
+	memory_allocation(Q2_plus_8, L_max, M_max);
+
+	double **Q2_minus_1;
+	double **Q2_minus_2;
+	double **Q2_minus_3;
+	double **Q2_minus_4;
+	double **Q2_minus_5;
+	double **Q2_minus_6;
+	double **Q2_minus_7;
+	double **Q2_minus_8;
+	memory_allocation(Q2_minus_1, L_max, M_max);
+	memory_allocation(Q2_minus_2, L_max, M_max);
+	memory_allocation(Q2_minus_3, L_max, M_max);
+	memory_allocation(Q2_minus_4, L_max, M_max);
+	memory_allocation(Q2_minus_5, L_max, M_max);
+	memory_allocation(Q2_minus_6, L_max, M_max);
+	memory_allocation(Q2_minus_7, L_max, M_max);
+	memory_allocation(Q2_minus_8, L_max, M_max);
 
 	double **R_plus_1;
 	double **R_plus_2;
@@ -605,10 +673,15 @@ int main() {
 				mu_m_left[l][m] = mu_0_m + (fabs(v_y[l][m - 1]) + fabs(v_y[l][m])) / 4.0;
 				mu_m_right[l][m] = mu_0_m + (fabs(v_y[l][m]) + fabs(v_y[l][m + 1])) / 4.0;
 
-				mu_ad_l_left[l][m] = mu_l_left[l][m] - fabs(v_z[l - 1][m] + v_z[l][m]) / 4.0;
+				/*mu_ad_l_left[l][m] = mu_l_left[l][m] - fabs(v_z[l - 1][m] + v_z[l][m]) / 4.0;
 				mu_ad_l_right[l][m] = mu_l_right[l][m] - fabs(v_z[l][m] + v_z[l + 1][m]) / 4.0;
 				mu_ad_m_left[l][m] = mu_m_left[l][m] - fabs(v_y[l][m - 1] + v_y[l][m]) / 4.0;
-				mu_ad_m_right[l][m] = mu_m_right[l][m] - fabs(v_y[l][m] + v_y[l][m + 1]) / 4.0;
+				mu_ad_m_right[l][m] = mu_m_right[l][m] - fabs(v_y[l][m] + v_y[l][m + 1]) / 4.0;*/
+
+				mu_ad_l_left[l][m] = 2 / 3 * mu_l_left[l][m];
+				mu_ad_l_right[l][m] = 2 / 3 * mu_l_right[l][m];
+				mu_ad_m_left[l][m] = 2 / 3 * mu_m_left[l][m];
+				mu_ad_m_right[l][m] = 2 / 3 * mu_m_right[l][m];
 			}
 		}
 
@@ -831,30 +904,30 @@ int main() {
 		// left boundary condition for current layer for anti-diffusion part
 
 		for (int m = 0; m < M_max + 1; m++) {
-			//u_ad_1[0][m] = rho[0][m] * r[0][m];
-			//u_ad_2[0][m] = u_ad_2[1][m];
-			//// u_ad_2[0][m] = 2 * u_ad_2[1][m] - u_ad_2[2][m];
-			//u_ad_3[0][m] = u_ad_2[0][m] * r_z[0][m];
-			//u_ad_4[0][m] = rho[0][m] * v_phi[0][m] * r[0][m];
-			//u_ad_5[0][m] = rho[0][m] * e[0][m] * r[0][m];
-			//u_ad_6[0][m] = H_phi[0][m];
-			//u_ad_7[0][m] = H_z[0][m] * r[0][m];
-			//u_ad_8[0][m] = u_ad_7[0][m] * r_z[0][m];
+			u_ad_1[0][m] = rho[0][m] * r[0][m];
+			u_ad_2[0][m] = u_ad_2[1][m];
+			// u_ad_2[0][m] = 2 * u_ad_2[1][m] - u_ad_2[2][m];
+			u_ad_3[0][m] = u_ad_2[0][m] * r_z[0][m];
+			u_ad_4[0][m] = rho[0][m] * v_phi[0][m] * r[0][m];
+			u_ad_5[0][m] = rho[0][m] * e[0][m] * r[0][m];
+			u_ad_6[0][m] = H_phi[0][m];
+			u_ad_7[0][m] = H_z[0][m] * r[0][m];
+			u_ad_8[0][m] = u_ad_7[0][m] * r_z[0][m];
 
-			u_ad_1[0][m] = u_td_1_next[0][m];
+			/*u_ad_1[0][m] = u_td_1_next[0][m];
 			u_ad_2[0][m] = u_td_2_next[0][m];
 			u_ad_3[0][m] = u_td_3_next[0][m];
 			u_ad_4[0][m] = u_td_4_next[0][m];
 			u_ad_5[0][m] = u_td_5_next[0][m];
 			u_ad_6[0][m] = u_td_6_next[0][m];
 			u_ad_7[0][m] = u_td_7_next[0][m];
-			u_ad_8[0][m] = u_td_8_next[0][m];
+			u_ad_8[0][m] = u_td_8_next[0][m];*/
 		}
 
 		// up and down boundary condition for current layer for anti-diffusion part
 
 		for (int l = 1; l < L_max + 1; l++) {
-			/*u_ad_1[l][0] = u_ad_1[l][1];
+			u_ad_1[l][0] = u_ad_1[l][1];
 			u_ad_2[l][0] = u_ad_2[l][1];
 			u_ad_3[l][0] = u_ad_2[l][0] * r_z[l][0];
 			u_ad_4[l][0] = u_ad_4[l][1];
@@ -870,9 +943,9 @@ int main() {
 			u_ad_5[l][M_max] = u_ad_5[l][M_max - 1];
 			u_ad_6[l][M_max] = u_ad_6[l][M_max - 1];
 			u_ad_7[l][M_max] = u_ad_7[l][M_max - 1];
-			u_ad_8[l][M_max] = u_ad_7[l][M_max] * r_z[l][M_max];*/
+			u_ad_8[l][M_max] = u_ad_7[l][M_max] * r_z[l][M_max];
 
-			u_ad_1[l][0] = u_td_1_next[l][0];
+			/*u_ad_1[l][0] = u_td_1_next[l][0];
 			u_ad_2[l][0] = u_td_2_next[l][0];
 			u_ad_3[l][0] = u_td_3_next[l][0];
 			u_ad_4[l][0] = u_td_4_next[l][0];
@@ -888,29 +961,29 @@ int main() {
 			u_ad_5[l][M_max] = u_td_5_next[l][M_max];
 			u_ad_6[l][M_max] = u_td_6_next[l][M_max];
 			u_ad_7[l][M_max] = u_td_7_next[l][M_max];
-			u_ad_8[l][M_max] = u_td_8_next[l][M_max];
+			u_ad_8[l][M_max] = u_td_8_next[l][M_max];*/
 		}
 
 		// right boundary condition for current layer for anti-diffusion part
 
 		for (int m = 1; m < M_max; m++) {
-			/*u_ad_1[L_max][m] = u_ad_1[L_max - 1][m];
+			u_ad_1[L_max][m] = u_ad_1[L_max - 1][m];
 			u_ad_2[L_max][m] = u_ad_2[L_max - 1][m];
 			u_ad_3[L_max][m] = u_ad_3[L_max - 1][m];
 			u_ad_4[L_max][m] = u_ad_4[L_max - 1][m];
 			u_ad_5[L_max][m] = u_ad_5[L_max - 1][m];
 			u_ad_6[L_max][m] = u_ad_6[L_max - 1][m];
 			u_ad_7[L_max][m] = u_ad_7[L_max - 1][m];
-			u_ad_8[L_max][m] = u_ad_8[L_max - 1][m];*/
+			u_ad_8[L_max][m] = u_ad_8[L_max - 1][m];
 
-			u_ad_1[L_max][m] = u_td_1_next[L_max][m];
+			/*u_ad_1[L_max][m] = u_td_1_next[L_max][m];
 			u_ad_2[L_max][m] = u_td_2_next[L_max][m];
 			u_ad_3[L_max][m] = u_td_3_next[L_max][m];
 			u_ad_4[L_max][m] = u_td_4_next[L_max][m];
 			u_ad_5[L_max][m] = u_td_5_next[L_max][m];
 			u_ad_6[L_max][m] = u_td_6_next[L_max][m];
 			u_ad_7[L_max][m] = u_td_7_next[L_max][m];
-			u_ad_8[L_max][m] = u_td_8_next[L_max][m];
+			u_ad_8[L_max][m] = u_td_8_next[L_max][m];*/
 		}
 
 		// constants for current layer for correction part
@@ -996,14 +1069,81 @@ int main() {
 								 max(0, mu_ad_m_left[l][m] * (u_td_8_next[l][m] - u_td_8_next[l][m - 1])) - 
 								 min(0, mu_ad_m_right[l][m] * (u_td_8_next[l][m + 1] - u_td_8_next[l][m]));
 
-				Q_plus_1[l][m] = u_max_1[l][m] - u_td_1_next[l][m];
+				/*Q_plus_1[l][m] = u_max_1[l][m] - u_td_1_next[l][m];
 				Q_plus_2[l][m] = u_max_2[l][m] - u_td_2_next[l][m];
 				Q_plus_3[l][m] = u_max_3[l][m] - u_td_3_next[l][m];
 				Q_plus_4[l][m] = u_max_4[l][m] - u_td_4_next[l][m];
 				Q_plus_5[l][m] = u_max_5[l][m] - u_td_5_next[l][m];
 				Q_plus_6[l][m] = u_max_6[l][m] - u_td_6_next[l][m];
 				Q_plus_7[l][m] = u_max_7[l][m] - u_td_7_next[l][m];
-				Q_plus_8[l][m] = u_max_8[l][m] - u_td_8_next[l][m];
+				Q_plus_8[l][m] = u_max_8[l][m] - u_td_8_next[l][m];*/
+
+				Q1_plus_1[l][m] = u_max_1[l][m] - u_td_1_next[l][m];
+				Q1_plus_2[l][m] = u_max_2[l][m] - u_td_2_next[l][m];
+				Q1_plus_3[l][m] = u_max_3[l][m] - u_td_3_next[l][m];
+				Q1_plus_4[l][m] = u_max_4[l][m] - u_td_4_next[l][m];
+				Q1_plus_5[l][m] = u_max_5[l][m] - u_td_5_next[l][m];
+				Q1_plus_6[l][m] = u_max_6[l][m] - u_td_6_next[l][m];
+				Q1_plus_7[l][m] = u_max_7[l][m] - u_td_7_next[l][m];
+				Q1_plus_8[l][m] = u_max_8[l][m] - u_td_8_next[l][m];
+
+				Q2_plus_1[l][m] = r[l][m] * 
+								  (max(u_a_1[l - 1][m] / r[l - 1][m], 
+									   u_a_1[l + 1][m] / r[l + 1][m], 
+									   u_a_1[l][m - 1] / r[l][m - 1], 
+									   u_a_1[l][m + 1] / r[l][m + 1], 
+									   u_a_1[l][m] / r[l][m]) - u_td_1_next[l][m] / r[l][m]);
+				Q2_plus_2[l][m] = r[l][m] * 
+								  (max(u_a_2[l - 1][m] / r[l - 1][m], 
+									   u_a_2[l + 1][m] / r[l + 1][m], 
+									   u_a_2[l][m - 1] / r[l][m - 1], 
+									   u_a_2[l][m + 1] / r[l][m + 1], 
+									   u_a_2[l][m] / r[l][m]) - u_td_2_next[l][m] / r[l][m]);
+				Q2_plus_3[l][m] = r[l][m] * 
+								  (max(u_a_3[l - 1][m] / r[l - 1][m], 
+									   u_a_3[l + 1][m] / r[l + 1][m], 
+									   u_a_3[l][m - 1] / r[l][m - 1], 
+									   u_a_3[l][m + 1] / r[l][m + 1], 
+									   u_a_3[l][m] / r[l][m]) - u_td_3_next[l][m] / r[l][m]);
+				Q2_plus_4[l][m] = r[l][m] * 
+								  (max(u_a_4[l - 1][m] / r[l - 1][m], 
+									   u_a_4[l + 1][m] / r[l + 1][m], 
+									   u_a_4[l][m - 1] / r[l][m - 1], 
+									   u_a_4[l][m + 1] / r[l][m + 1], 
+									   u_a_4[l][m] / r[l][m]) - u_td_4_next[l][m] / r[l][m]);
+				Q2_plus_5[l][m] = r[l][m] * 
+								  (max(u_a_5[l - 1][m] / r[l - 1][m], 
+									   u_a_5[l + 1][m] / r[l + 1][m], 
+									   u_a_5[l][m - 1] / r[l][m - 1], 
+									   u_a_5[l][m + 1] / r[l][m + 1], 
+									   u_a_5[l][m] / r[l][m]) - u_td_5_next[l][m] / r[l][m]);
+				Q2_plus_6[l][m] = r[l][m] * 
+								  (max(u_a_6[l - 1][m] / r[l - 1][m], 
+									   u_a_6[l + 1][m] / r[l + 1][m], 
+									   u_a_6[l][m - 1] / r[l][m - 1], 
+									   u_a_6[l][m + 1] / r[l][m + 1], 
+									   u_a_6[l][m] / r[l][m]) - u_td_6_next[l][m] / r[l][m]);
+				Q2_plus_7[l][m] = r[l][m] * 
+								  (max(u_a_7[l - 1][m] / r[l - 1][m], 
+									   u_a_7[l + 1][m] / r[l + 1][m], 
+									   u_a_7[l][m - 1] / r[l][m - 1], 
+									   u_a_7[l][m + 1] / r[l][m + 1], 
+									   u_a_7[l][m] / r[l][m]) - u_td_7_next[l][m] / r[l][m]);
+				Q2_plus_8[l][m] = r[l][m] * 
+								  (max(u_a_8[l - 1][m] / r[l - 1][m], 
+									   u_a_8[l + 1][m] / r[l + 1][m], 
+									   u_a_8[l][m - 1] / r[l][m - 1], 
+									   u_a_8[l][m + 1] / r[l][m + 1], 
+									   u_a_8[l][m] / r[l][m]) - u_td_8_next[l][m] / r[l][m]);
+
+				Q_plus_1[l][m] = min(Q1_plus_1[l][m], Q2_plus_1[l][m]);
+				Q_plus_2[l][m] = min(Q1_plus_2[l][m], Q2_plus_2[l][m]);
+				Q_plus_3[l][m] = min(Q1_plus_3[l][m], Q2_plus_3[l][m]);
+				Q_plus_4[l][m] = min(Q1_plus_4[l][m], Q2_plus_4[l][m]);
+				Q_plus_5[l][m] = min(Q1_plus_5[l][m], Q2_plus_5[l][m]);
+				Q_plus_6[l][m] = min(Q1_plus_6[l][m], Q2_plus_6[l][m]);
+				Q_plus_7[l][m] = min(Q1_plus_7[l][m], Q2_plus_7[l][m]);
+				Q_plus_8[l][m] = min(Q1_plus_8[l][m], Q2_plus_8[l][m]);
 
 				P_minus_1[l][m] = max(0, mu_ad_l_right[l][m] * (u_td_1_next[l + 1][m] - u_td_1_next[l][m])) - 
 								  min(0, mu_ad_l_left[l][m] * (u_td_1_next[l][m] - u_td_1_next[l - 1][m])) + 
@@ -1038,14 +1178,73 @@ int main() {
 								  max(0, mu_ad_m_right[l][m] * (u_td_8_next[l][m + 1] - u_td_8_next[l][m])) - 
 								  min(0, mu_ad_m_left[l][m] * (u_td_8_next[l][m] - u_td_8_next[l][m - 1]));
 
-				Q_minus_1[l][m] = u_td_1_next[l][m] - u_min_1[l][m];
+				/*Q_minus_1[l][m] = u_td_1_next[l][m] - u_min_1[l][m];
 				Q_minus_2[l][m] = u_td_2_next[l][m] - u_min_2[l][m];
 				Q_minus_3[l][m] = u_td_3_next[l][m] - u_min_3[l][m];
 				Q_minus_4[l][m] = u_td_4_next[l][m] - u_min_4[l][m];
 				Q_minus_5[l][m] = u_td_5_next[l][m] - u_min_5[l][m];
 				Q_minus_6[l][m] = u_td_6_next[l][m] - u_min_6[l][m];
 				Q_minus_7[l][m] = u_td_7_next[l][m] - u_min_7[l][m];
-				Q_minus_8[l][m] = u_td_8_next[l][m] - u_min_8[l][m];
+				Q_minus_8[l][m] = u_td_8_next[l][m] - u_min_8[l][m];*/
+
+				Q1_minus_1[l][m] = u_td_1_next[l][m] - u_min_1[l][m];
+				Q1_minus_2[l][m] = u_td_2_next[l][m] - u_min_2[l][m];
+				Q1_minus_3[l][m] = u_td_3_next[l][m] - u_min_3[l][m];
+				Q1_minus_4[l][m] = u_td_4_next[l][m] - u_min_4[l][m];
+				Q1_minus_5[l][m] = u_td_5_next[l][m] - u_min_5[l][m];
+				Q1_minus_6[l][m] = u_td_6_next[l][m] - u_min_6[l][m];
+				Q1_minus_7[l][m] = u_td_7_next[l][m] - u_min_7[l][m];
+				Q1_minus_8[l][m] = u_td_8_next[l][m] - u_min_8[l][m];
+
+				Q2_minus_1[l][m] = r[l][m] * (u_td_1_next[l][m] / r[l][m] - min(u_b_1[l - 1][m] / r[l - 1][m], 
+																				u_b_1[l + 1][m] / r[l + 1][m], 
+																				u_b_1[l][m - 1] / r[l][m - 1], 
+																				u_b_1[l][m + 1] / r[l][m + 1], 
+																				u_b_1[l][m] / r[l][m]));
+				Q2_minus_2[l][m] = r[l][m] * (u_td_2_next[l][m] / r[l][m] - min(u_b_2[l - 1][m] / r[l - 1][m], 
+																				u_b_2[l + 1][m] / r[l + 1][m], 
+																				u_b_2[l][m - 1] / r[l][m - 1], 
+																				u_b_2[l][m + 1] / r[l][m + 1], 
+																				u_b_2[l][m] / r[l][m]));
+				Q2_minus_3[l][m] = r[l][m] * (u_td_3_next[l][m] / r[l][m] - min(u_b_3[l - 1][m] / r[l - 1][m], 
+																				u_b_3[l + 1][m] / r[l + 1][m], 
+																				u_b_3[l][m - 1] / r[l][m - 1], 
+																				u_b_3[l][m + 1] / r[l][m + 1], 
+																				u_b_3[l][m] / r[l][m]));
+				Q2_minus_4[l][m] = r[l][m] * (u_td_4_next[l][m] / r[l][m] - min(u_b_4[l - 1][m] / r[l - 1][m], 
+																				u_b_4[l + 1][m] / r[l + 1][m], 
+																				u_b_4[l][m - 1] / r[l][m - 1], 
+																				u_b_4[l][m + 1] / r[l][m + 1], 
+																				u_b_4[l][m] / r[l][m]));
+				Q2_minus_5[l][m] = r[l][m] * (u_td_5_next[l][m] / r[l][m] - min(u_b_5[l - 1][m] / r[l - 1][m], 
+																				u_b_5[l + 1][m] / r[l + 1][m], 
+																				u_b_5[l][m - 1] / r[l][m - 1], 
+																				u_b_5[l][m + 1] / r[l][m + 1], 
+																				u_b_5[l][m] / r[l][m]));
+				Q2_minus_6[l][m] = r[l][m] * (u_td_6_next[l][m] / r[l][m] - min(u_b_6[l - 1][m] / r[l - 1][m], 
+																				u_b_6[l + 1][m] / r[l + 1][m], 
+																				u_b_6[l][m - 1] / r[l][m - 1], 
+																				u_b_6[l][m + 1] / r[l][m + 1], 
+																				u_b_6[l][m] / r[l][m]));
+				Q2_minus_7[l][m] = r[l][m] * (u_td_7_next[l][m] / r[l][m] - min(u_b_7[l - 1][m] / r[l - 1][m], 
+																				u_b_7[l + 1][m] / r[l + 1][m], 
+																				u_b_7[l][m - 1] / r[l][m - 1], 
+																				u_b_7[l][m + 1] / r[l][m + 1], 
+																				u_b_7[l][m] / r[l][m]));
+				Q2_minus_8[l][m] = r[l][m] * (u_td_8_next[l][m] / r[l][m] - min(u_b_8[l - 1][m] / r[l - 1][m], 
+																				u_b_8[l + 1][m] / r[l + 1][m], 
+																				u_b_8[l][m - 1] / r[l][m - 1], 
+																				u_b_8[l][m + 1] / r[l][m + 1], 
+																				u_b_8[l][m] / r[l][m]));
+
+				Q_minus_1[l][m] = max(Q1_minus_1[l][m], Q2_minus_1[l][m]);
+				Q_minus_2[l][m] = max(Q1_minus_2[l][m], Q2_minus_2[l][m]);
+				Q_minus_3[l][m] = max(Q1_minus_3[l][m], Q2_minus_3[l][m]);
+				Q_minus_4[l][m] = max(Q1_minus_4[l][m], Q2_minus_4[l][m]);
+				Q_minus_5[l][m] = max(Q1_minus_5[l][m], Q2_minus_5[l][m]);
+				Q_minus_6[l][m] = max(Q1_minus_6[l][m], Q2_minus_6[l][m]);
+				Q_minus_7[l][m] = max(Q1_minus_7[l][m], Q2_minus_7[l][m]);
+				Q_minus_8[l][m] = max(Q1_minus_8[l][m], Q2_minus_8[l][m]);
 
 				if (P_plus_1[l][m] > 0) {
 					R_plus_1[l][m] = min(1, Q_plus_1[l][m] / P_plus_1[l][m]);
@@ -1444,8 +1643,10 @@ int main() {
 				v_y[l][m] = v_r[l][m] - v_z[l][m] * r_z[l][m];
 
 				H_phi[l][m] = u_cor_6[l][m];
-				H_z[l][m] = u_cor_7[l][m] / r[l][m];
-				H_r[l][m] = u_cor_8[l][m] / r[l][m];
+				//H_z[l][m] = u_cor_7[l][m] / r[l][m];
+				H_z[l][m] = u_td_7_next[l][m] / r[l][m];
+				//H_r[l][m] = u_cor_8[l][m] / r[l][m];
+				H_r[l][m] = u_td_8_next[l][m] / r[l][m];
 				H_y[l][m] = H_r[l][m] - H_z[l][m] * r_z[l][m];
 
 				e[l][m] = u_cor_5[l][m] / u_cor_1[l][m];
@@ -1653,6 +1854,42 @@ int main() {
 	memory_clearing(Q_minus_6, L_max);
 	memory_clearing(Q_minus_7, L_max);
 	memory_clearing(Q_minus_8, L_max);
+
+	memory_clearing(Q1_plus_1, L_max);
+	memory_clearing(Q1_plus_2, L_max);
+	memory_clearing(Q1_plus_3, L_max);
+	memory_clearing(Q1_plus_4, L_max);
+	memory_clearing(Q1_plus_5, L_max);
+	memory_clearing(Q1_plus_6, L_max);
+	memory_clearing(Q1_plus_7, L_max);
+	memory_clearing(Q1_plus_8, L_max);
+
+	memory_clearing(Q1_minus_1, L_max);
+	memory_clearing(Q1_minus_2, L_max);
+	memory_clearing(Q1_minus_3, L_max);
+	memory_clearing(Q1_minus_4, L_max);
+	memory_clearing(Q1_minus_5, L_max);
+	memory_clearing(Q1_minus_6, L_max);
+	memory_clearing(Q1_minus_7, L_max);
+	memory_clearing(Q1_minus_8, L_max);
+
+	memory_clearing(Q2_plus_1, L_max);
+	memory_clearing(Q2_plus_2, L_max);
+	memory_clearing(Q2_plus_3, L_max);
+	memory_clearing(Q2_plus_4, L_max);
+	memory_clearing(Q2_plus_5, L_max);
+	memory_clearing(Q2_plus_6, L_max);
+	memory_clearing(Q2_plus_7, L_max);
+	memory_clearing(Q2_plus_8, L_max);
+
+	memory_clearing(Q2_minus_1, L_max);
+	memory_clearing(Q2_minus_2, L_max);
+	memory_clearing(Q2_minus_3, L_max);
+	memory_clearing(Q2_minus_4, L_max);
+	memory_clearing(Q2_minus_5, L_max);
+	memory_clearing(Q2_minus_6, L_max);
+	memory_clearing(Q2_minus_7, L_max);
+	memory_clearing(Q2_minus_8, L_max);
 
 	memory_clearing(R_plus_1, L_max);
 	memory_clearing(R_plus_2, L_max);
