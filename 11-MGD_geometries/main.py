@@ -370,9 +370,9 @@ N = N_max_main
 # search critical flux for difference parameters for variation of beta
 
 beta_main = 1.0
-H_z_S_main = 0.45
-H_z_S_cr_1 = 0.45
-H_z_S_cr_2 = 0.45
+H_z_S_main = 0.58
+H_z_S_cr_1 = 0.54
+H_z_S_cr_2 = 0.6
 
 # S = 1.78(z - 0.5)^2 + 0.555 -> H_z_S_main = 0.58
 # S = -3z^3 + 6z^2 - 3z + 1 -> HzS_cr_1 = 0.54
@@ -418,18 +418,18 @@ plt.legend()
 plt.show()
 
 # geometry of channel
-plt.title('Geometry of channel')
-plt.xlabel('z coordinate')
-plt.ylabel('r coordinate')
+plt.title('Геометрии канала')
+plt.xlabel(r'z')
+plt.ylabel(r'r')
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = 1.78 * (i_m * h_main - 0.5) ** 2 + 0.555
-plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
+plt.plot(x_lst, y_lst, label=r'$S = 1.78(z - 0.5)^2 + 0.555$')
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
-plt.plot(x_lst, y_lst, label='S = -3z^3 + 6z^2 - 3z + 1')
+plt.plot(x_lst, y_lst, label=r'$S = -3z^3 + 6z^2 - 3z + 1$')
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = 3 * (i_m * h_main - 1) ** 3 + 6 * (i_m * h_main - 1) ** 2 + 3 * (i_m * h_main - 1) + 1
-plt.plot(x_lst, y_lst, label='S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1')
+plt.plot(x_lst, y_lst, label=r'$S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1$')
 plt.grid()
 plt.legend()
 plt.show()
@@ -438,9 +438,9 @@ plt.show()
 
 # for rho
 
-plt.title('Plasma density')
-plt.xlabel('channel length coordinate')
-plt.ylabel('rho value')
+plt.title(r'Плотность плазмы $(\rho)$')
+plt.xlabel(r'z')
+plt.ylabel(r'$\rho$')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
@@ -449,7 +449,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
+plt.plot(x_lst, y_lst, label=r'$S = 1.78(z - 0.5)^2 + 0.555$')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -457,7 +457,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_cr_1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='S = -3z^3 + 6z^2 - 3z + 1')
+plt.plot(x_lst, y_lst, label=r'$S = -3z^3 + 6z^2 - 3z + 1$')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = 3 * (i_m * h_main - 1) ** 3 + 6 * (i_m * h_main - 1) ** 2 + 3 * (i_m * h_main - 1) + 1
@@ -465,16 +465,16 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_cr_2)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1')
+plt.plot(x_lst, y_lst, label=r'$S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1$')
 
 plt.legend()
 plt.show()
 
 # for v_z
 
-plt.title('Longitudinal velocity')
-plt.xlabel('channel length coordinate')
-plt.ylabel('v_z value')
+plt.title(r'Продольная скорость $(v_z)$')
+plt.xlabel(r'z')
+plt.ylabel(r'$v_z$')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
@@ -483,7 +483,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
+plt.plot(x_lst, y_lst, label=r'$S = 1.78(z - 0.5)^2 + 0.555$')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -491,7 +491,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_cr_1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = -3z^3 + 6z^2 - 3z + 1')
+plt.plot(x_lst, y_lst, label=r'$S = -3z^3 + 6z^2 - 3z + 1$')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = 3 * (i_m * h_main - 1) ** 3 + 6 * (i_m * h_main - 1) ** 2 + 3 * (i_m * h_main - 1) + 1
@@ -499,16 +499,16 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_cr_2)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1')
+plt.plot(x_lst, y_lst, label=r'$S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1$')
 
 plt.legend()
 plt.show()
 
 # for v_phi
 
-plt.title('Azimuthal velocity')
-plt.xlabel('channel length coordinate')
-plt.ylabel('v_phi value')
+plt.title(r'Азимутальная скорость $(v_\phi)$')
+plt.xlabel(r'z')
+plt.ylabel(r'$v_\phi$')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
@@ -517,7 +517,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
+plt.plot(x_lst, y_lst, label=r'$S = 1.78(z - 0.5)^2 + 0.555$')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -525,7 +525,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_cr_1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = -3z^3 + 6z^2 - 3z + 1')
+plt.plot(x_lst, y_lst, label=r'$S = -3z^3 + 6z^2 - 3z + 1$')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = 3 * (i_m * h_main - 1) ** 3 + 6 * (i_m * h_main - 1) ** 2 + 3 * (i_m * h_main - 1) + 1
@@ -533,11 +533,11 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_cr_2)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1')
+plt.plot(x_lst, y_lst, label=r'$S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1$')
 
 plt.legend()
 plt.show()
-
+'''
 # for energy
 
 plt.title('Plasma energy')
@@ -571,12 +571,12 @@ plt.plot(x_lst, y_lst, label='S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1')
 
 plt.legend()
 plt.show()
-
+'''
 # for H_phi
 
-plt.title('Azimuthal magnetic field')
-plt.xlabel('channel length coordinate')
-plt.ylabel('H_phi value')
+plt.title(r'Азимутальное магнитное поле $H_\phi$')
+plt.xlabel(r'z')
+plt.ylabel(r'$H_\phi$')
 plt.grid()
 
 for i_m in range(I_max_main + 1):
@@ -585,7 +585,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_main)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 1.78(z - 0.5)^2 + 0.555')
+plt.plot(x_lst, y_lst, label=r'$S = 1.78(z - 0.5)^2 + 0.555$')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = - 3 * (i_m * h_main) ** 3 + 6 * (i_m * h_main) ** 2 - 3 * (i_m * h_main) + 1
@@ -593,7 +593,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_cr_1)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = -3z^3 + 6z^2 - 3z + 1')
+plt.plot(x_lst, y_lst, label=r'$S = -3z^3 + 6z^2 - 3z + 1$')
 
 for i_m in range(I_max_main + 1):
     S_mesh[i_m] = 3 * (i_m * h_main - 1) ** 3 + 6 * (i_m * h_main - 1) ** 2 + 3 * (i_m * h_main - 1) + 1
@@ -601,7 +601,7 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_cr_2)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1')
+plt.plot(x_lst, y_lst, label=r'$S = 3(z-1)^3 + 6(z-1)^2 + 3(z-1) + 1$')
 
 plt.legend()
 plt.show()
