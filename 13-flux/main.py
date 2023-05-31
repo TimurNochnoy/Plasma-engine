@@ -375,87 +375,88 @@ algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_
           H_z_S_main)
 
 # FOR VARIATION OF FLUXES
-
+'''
 # for rho
 
-plt.title('Plasma density')
-plt.xlabel('channel length coordinate')
-plt.ylabel('rho value')
+plt.title(r'Плотность плазмы ($\rho$)')
+plt.xlabel(r'z')
+plt.ylabel(r'$\rho$')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0$')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0.3)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0.3')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0.3$')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_1[N, i_m] / S_mesh[i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0.5')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0.5$')
 
 plt.legend()
 plt.show()
 
 # for v_z
 
-plt.title('Longitudinal velocity')
-plt.xlabel('channel length coordinate')
-plt.ylabel('v_z value')
+plt.title(r'Продольная скорость($v_z$)')
+plt.xlabel(r'z')
+plt.ylabel(r'$v_z$')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0$')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0.3)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0.3')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0.3$')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_2[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0.5')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0.5$')
 
 plt.legend()
 plt.show()
-
+'''
+'''
 # for v_phi
 
-plt.title('Azimuthal velocity')
-plt.xlabel('channel length coordinate')
-plt.ylabel('v_phi value')
+plt.title(r'Азимутальная скорость ($v_{phi}$)')
+plt.xlabel(r'z')
+plt.ylabel(r'$v_{phi}$')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0$')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0.3)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0.3')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0.3$')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_3[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0.5')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0$')
 
 plt.legend()
 plt.show()
@@ -487,35 +488,35 @@ plt.plot(x_lst, y_lst, label='H_z*S = 0.5')
 
 plt.legend()
 plt.show()
-
+'''
 # for H_phi
 
-plt.title('Azimuthal magnetic field')
-plt.xlabel('channel length coordinate')
-plt.ylabel('H_phi value')
+plt.title(r'Азимутальное магнитное поле($H_{phi}$)')
+plt.xlabel(r'z')
+plt.ylabel(r'$H_{phi}$')
 plt.grid()
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0')
-
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0$')
+'''
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0.3)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0.3')
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0.3$')
 
 algorithm(I_max_main, N_max_main, k_main, gamma_main, beta_main, mu_0_main, rho_0_main, v_z_0_main, v_phi_0_main,
           0.5)
 for i_m in range(I_max_main + 1):
     y_lst[i_m] = u_cor_5[N, i_m] / u_cor_1[N, i_m]
-plt.plot(x_lst, y_lst, label='H_z*S = 0.5')
-
+plt.plot(x_lst, y_lst, label=r'$H_zS = 0.5$')
+'''
 plt.legend()
 plt.show()
-
+'''
 # for H_z
 
 plt.title('Longitudinal magnetic field')
@@ -537,3 +538,4 @@ plt.plot(x_lst, y_lst, label='H_z*S = 0.5')
 
 plt.legend()
 plt.show()
+'''
