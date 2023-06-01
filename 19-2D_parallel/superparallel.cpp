@@ -683,11 +683,11 @@ int main(int argc, char* argv[]) {
 	// evolution in time
 #pragma omp parallel shared(N_max), private(myid)
 {
-#pragma omp for
+//#pragma omp for
 	for (int n = 0; n < N_max; n++) {
 
 		// constants for current layer
-		
+#pragma omp for		
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
 				mu_l_left[l][m] = mu_0_l + (fabs(v_z[l - 1][m]) + fabs(v_z[l][m])) / 4.0;
@@ -711,7 +711,7 @@ int main(int argc, char* argv[]) {
 		
 		double* tmp;
 		tmp = new double [L_max + 1];
-
+#pragma omp for
 		for (int l = 0; l < L_max + 1; l++) {
 			tmp[l] = dr[l] / (dr[l] * max_array(mu_l_left, L_max, M_max) + dz * max_array(mu_m_left, L_max, M_max));
 		}
@@ -720,7 +720,7 @@ int main(int argc, char* argv[]) {
 		delete [] tmp;
 
 		// constants for current layer
-
+#pragma omp for
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
 				C_0[l][m] = 1 - dt / dz * (v_z[l + 1][m] - v_z[l - 1][m]) / 4.0 - dt / dr[l] * (v_y[l][m + 1] - v_y[l][m - 1]) / 4.0
@@ -737,7 +737,7 @@ int main(int argc, char* argv[]) {
 		// printf("n=%d   rho[40][20]=%lf   v_z[40][20]=%lf   v_phi[40][20]=%lf\n", n, rho[40][20], v_z[40][20], v_phi[40][20]);
 
 		// filling central points of grid for transport part
-
+#pragma omp for
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
 				u_td_1_next[l][m] = C_0[l][m] * u_td_1[l][m] + 
@@ -817,7 +817,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// left boundary condition for current layer
-
+#pragma omp for
 		for (int m = 0; m < M_max + 1; m++) {
 			rho[0][m] = 1.0;
 			v_phi[0][m] = 0;
@@ -829,7 +829,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// left boundary condition for current layer for transport part
-
+#pragma omp for
 		for (int m = 0; m < M_max + 1; m++) {
 			u_td_1_next[0][m] = rho[0][m] * r[0][m];
 			u_td_2_next[0][m] = u_td_2_next[1][m];
@@ -843,7 +843,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// up and down boundary condition for current layer for transport part
-
+#pragma omp for
 		for (int l = 1; l < L_max + 1; l++) {
 			u_td_1_next[l][0] = u_td_1_next[l][1];
 			u_td_2_next[l][0] = u_td_2_next[l][1];
@@ -865,7 +865,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// right boundary condition for current layer for transport part
-
+#pragma omp for
 		for (int m = 1; m < M_max; m++) {
 			u_td_1_next[L_max][m] = u_td_1_next[L_max - 1][m];
 			u_td_2_next[L_max][m] = u_td_2_next[L_max - 1][m];
@@ -878,7 +878,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// filling central points of grid for anti-diffusion part
-
+#pragma omp for
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
 				u_ad_1[l][m] = u_td_1_next[l][m] * (1.0 + dt / dz * (mu_ad_l_left[l][m] + mu_ad_l_right[l][m]) + 
@@ -924,7 +924,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// left boundary condition for current layer for anti-diffusion part
-
+#pragma omp for
 		for (int m = 0; m < M_max + 1; m++) {
 			u_ad_1[0][m] = rho[0][m] * r[0][m];
 			u_ad_2[0][m] = u_ad_2[1][m];
@@ -947,7 +947,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// up and down boundary condition for current layer for anti-diffusion part
-
+#pragma omp for
 		for (int l = 1; l < L_max + 1; l++) {
 			u_ad_1[l][0] = u_ad_1[l][1];
 			u_ad_2[l][0] = u_ad_2[l][1];
@@ -987,7 +987,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// right boundary condition for current layer for anti-diffusion part
-
+#pragma omp for
 		for (int m = 1; m < M_max; m++) {
 			u_ad_1[L_max][m] = u_ad_1[L_max - 1][m];
 			u_ad_2[L_max][m] = u_ad_2[L_max - 1][m];
@@ -1009,7 +1009,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// constants for current layer for correction part
-		
+#pragma omp for		
 		for (int l = 0; l < L_max + 1; l++) {
 			for (int m = 0; m < M_max + 1; m++) {
 				u_a_1[l][m] = max(u_td_1[l][m], u_td_1_next[l][m]);
@@ -1031,7 +1031,7 @@ int main(int argc, char* argv[]) {
 				u_b_8[l][m] = min(u_td_8[l][m], u_td_8_next[l][m]);
 			}
 		}
-
+#pragma omp for
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
 				u_max_1[l][m] = max(u_a_1[l - 1][m], u_a_1[l + 1][m], u_a_1[l][m - 1], u_a_1[l][m + 1], u_a_1[l][m]);
@@ -1055,7 +1055,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// filling P, Q and R constants
-
+#pragma omp for
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
 				P_plus_1[l][m] = max(0, mu_ad_l_left[l][m] * (u_td_1_next[l][m] - u_td_1_next[l - 1][m])) - 
@@ -1353,7 +1353,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// constants for correction part
-
+#pragma omp for
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
 				if (mu_ad_l_left[l][m] * (u_td_1_next[l][m] - u_td_1_next[l - 1][m]) >= 0) {
@@ -1523,7 +1523,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// filling central points of grid for correction part
-
+#pragma omp for
 		for (int l = 1; l < L_max; l++) {
 			for (int m = 1; m < M_max; m++) {
 				u_cor_1[l][m] = u_td_1_next[l][m] - 
@@ -1570,7 +1570,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// left boundary condition for current layer for correction part
-
+#pragma omp for
 		for (int m = 0; m < M_max + 1; m++) {
 			u_cor_1[0][m] = rho[0][m] * r[0][m];
 			u_cor_2[0][m] = u_cor_2[1][m];
@@ -1593,7 +1593,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// up and down boundary condition for current layer for correction part
-
+#pragma omp for
 		for (int l = 1; l < L_max + 1; l++) {
 			u_cor_1[l][0] = u_cor_1[l][1];
 			u_cor_2[l][0] = u_cor_2[l][1];
@@ -1633,7 +1633,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// right boundary condition for current layer for anti-diffusion part
-
+#pragma omp for
 		for (int m = 1; m < M_max; m++) {
 			u_cor_1[L_max][m] = u_cor_1[L_max - 1][m];
 			u_cor_2[L_max][m] = u_cor_2[L_max - 1][m];
@@ -1655,7 +1655,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// update parameters of problem
-
+#pragma omp for
 		for (int l = 0; l < L_max + 1; l++) {
 			for (int m = 0; m < M_max + 1; m++) {
 				rho[l][m] = u_cor_1[l][m] / r[l][m];
@@ -1678,7 +1678,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// update u_td
-
+#pragma omp for
 		for (int l = 0; l < L_max + 1; l++) {
 			for (int m = 0; m < M_max + 1; m++) {
 				u_td_1[l][m] = u_cor_1[l][m];
@@ -1693,6 +1693,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 }
+
 	// finish count time
 
 	end = omp_get_wtime();
@@ -1703,7 +1704,7 @@ int main(int argc, char* argv[]) {
 	printf("Time for %d processes: %f sec\n", procs, total);
 
 	std::ofstream out;
-	out.open("TIME.txt", std::ios::app);
+	out.open("SUPERTIME.txt", std::ios::app);
 	if (out.is_open()) {
 		out << procs << " " << total << "\n";
 	}
