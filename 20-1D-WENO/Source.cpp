@@ -96,8 +96,8 @@ int main() {
         v_z[i] = 0.1;
         p[i] = beta / 2 * pow(rho[i], gamma);
         e[i] = beta / (2 * (gamma - 1));
-        H_phi[i] = 1 - 0.8 * z[i];
-        H_z[i] = 0 / S[i];
+        H_phi[i] = 1 - 0.9 * z[i];
+        H_z[i] = 0.1 / S[i];
     }
 
     for (int i = 0; i < L_max + 1; i++) {
