@@ -9,6 +9,7 @@
 **/Debug/*
 **/.idea/*
 **/.ipynb_checkpoints/*
+**/.vs/*
 **/.__pycache__/*
 *.zip
 *.log
