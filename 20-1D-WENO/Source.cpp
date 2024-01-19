@@ -14,9 +14,9 @@ int main() {
 
     double T = 10;
     double t = 0;
-    double dt = 0.001;
+    double dt = 0.0001;
 
-    int L_max = 100;
+    int L_max = 1000;
 
     double dz = double(1.0 / L_max);
 
@@ -88,6 +88,20 @@ int main() {
         u_6_next[i] = 0;
     }
 
+    // create stencil variable
+
+    double stencil_1 = 0;
+    double stencil_2 = 0;
+    double stencil_3 = 0;
+
+    double* f_right = new double[L_max + 1];
+    double* f_left = new double[L_max + 1];
+
+    for (int i = 0; i < L_max + 1; i++) {
+        f_right[i] = 0;
+        f_left[i] = 0;
+    }
+
     // initial conditions
 
     for (int i = 0; i < L_max + 1; i++) {
@@ -97,7 +111,7 @@ int main() {
         p[i] = beta / 2 * pow(rho[i], gamma);
         e[i] = beta / (2 * (gamma - 1));
         H_phi[i] = 1 - 0.9 * z[i];
-        H_z[i] = 0.1 / S[i];
+        H_z[i] = 0 / S[i];
     }
 
     for (int i = 0; i < L_max + 1; i++) {
@@ -112,6 +126,8 @@ int main() {
     // start time
 
     while (t < T) {
+
+        // Lax-Friedrichs method
 
         for (int i = 0; i < L_max + 1; i++) {
             if (i != 0 && i != L_max) {
@@ -148,6 +164,17 @@ int main() {
                 u_5_next[i] = u_5_next[i - 1];
                 u_6_next[i] = u_6_next[i - 1];
             }
+        }
+
+        // calculate stencils
+
+        for (int i = 2; i < L_max - 1; i++) {
+            stencil_1 = 1.0 / 3.0 * u_1[i - 2] * v_z[i - 2] - 7.0 / 6.0 * u_1[i - 1] * v_z[i - 1] + 11.0 / 6.0 * u_1[i] * v_z[i];
+            stencil_2 = -1.0 / 6.0 * u_1[i - 1] * v_z[i - 1] + 5.0 / 6.0 * u_1[i] * v_z[i] + 1.0 / 3.0 * u_1[i + 1] * v_z[i + 1];
+            stencil_3 = 1.0 / 3.0 * u_1[i] * v_z[i] + 5.0 / 6.0 * u_1[i + 1] * v_z[i + 1] - 1.0 / 6.0 * u_1[i + 2] * v_z[i + 2];
+
+            f_right[i] = 1.0 / 10.0 * stencil_1 + 3.0 / 5.0 * stencil_2 + 3.0 / 10.0 * stencil_3;
+            f_left[L_max - i] = 1.0 / 10.0 * stencil_1 + 3.0 / 5.0 * stencil_2 + 3.0 / 10.0 * stencil_3;
         }
 
         // data update
