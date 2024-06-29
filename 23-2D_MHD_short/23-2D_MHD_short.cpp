@@ -95,13 +95,13 @@ int main(int argc, char* argv[]) {
     double gamma = 1.67;
 	double beta = 0.05;
 
-	double H_z0 = 0.1;
+	double H_z0 = 0;
 
 	int animate = 0;
 
     // discrete solution area
 
-    double T = 0.0002;
+    double T = 0.01;
     double t = 0.0;
     double dt = 0.0001;
 
@@ -160,15 +160,6 @@ int main(int argc, char* argv[]) {
 	memory_allocation_2D(u0_7, L_max + 1, M_max + 1);
 	memory_allocation_2D(u0_8, L_max + 1, M_max + 1);
 
-	double *u0_f_1 = new double [L_max + 1];
-	double *u0_f_2 = new double [L_max + 1];
-	double *u0_f_3 = new double [L_max + 1];
-	double *u0_f_4 = new double [L_max + 1];
-	double *u0_f_5 = new double [L_max + 1];
-	double *u0_f_6 = new double [L_max + 1];
-	double *u0_f_7 = new double [L_max + 1];
-	double *u0_f_8 = new double [L_max + 1];
-
 	// creating arrays for physical parameters
 
 	double **rho;
@@ -192,33 +183,16 @@ int main(int argc, char* argv[]) {
 	memory_allocation_2D(H_phi, L_max + 1, M_max + 1);
 	memory_allocation_2D(H_z, L_max + 1, M_max + 1);
 
-	double *rho_f = new double [L_max + 1];
-	double *v_r_f = new double [L_max + 1];
-	double *v_phi_f = new double [L_max + 1];
-	double *v_z_f = new double [L_max + 1];
-	double *e_f = new double [L_max + 1];
-	double *p_f = new double [L_max + 1];
-	double *P_f = new double [L_max + 1];
-	double *H_r_f = new double [L_max + 1];
-	double *H_phi_f = new double [L_max + 1];
-	double *H_z_f = new double [L_max + 1];
-
 	double **r;
 	double **r_z;
 	memory_allocation_2D(r, L_max + 1, M_max + 1);
 	memory_allocation_2D(r_z, L_max + 1, M_max + 1);
 	double *R = new double [L_max + 1];
 
-	double *r_f = new double [L_max + 1];
-	double *r_z_f = new double [L_max + 1];
-
 	double **v_y;
 	double **H_y;
 	memory_allocation_2D(v_y, L_max + 1, M_max + 1);
 	memory_allocation_2D(H_y, L_max + 1, M_max + 1);
-
-	double *v_y_f = new double [L_max + 1];
-	double *H_y_f = new double [L_max + 1];
 
 	// filling zeros
 
@@ -239,9 +213,6 @@ int main(int argc, char* argv[]) {
 			r[l][m] = (1 - m * dy) * r1(l * dz) + m * dy * r2(l * dz);
 			r_z[l][m] = (1 - m * dy) * der_r1(l * dz) + m * dy * der_r2(l * dz);
 		}
-
-		r_f[l] = -r[l][1];
-		r_z_f[l] = -r_z[l][1];
 	}
 
 	// l > L_end
@@ -253,17 +224,13 @@ int main(int argc, char* argv[]) {
 			r[l][m] = m * dy * r2(l * dz);
 			r_z[l][m] = m * dy * der_r2(l * dz);
 		}
-
-		r_f[l] = -r[l][1];
-		r_z_f[l] = -r_z[l][1];
 	}
 
 	for (int l = L_end + 1; l < L_max + 1; l++) {
 		//r[l][0] = dy / 8.0;
-		//r_f[l] = -r[l][0];
 	}
 
-	printf("%lf   %lf   %lf\n", dy, r[39][0], r[40][0]);
+	//printf("%lf   %lf   %lf\n", dy, r[39][0], r[40][0]);
 
 	// INITIAL CONDITION
 
@@ -330,27 +297,6 @@ int main(int argc, char* argv[]) {
 		H_y[l][0] = 0;
 	}
 
-	// update parameters
-
-	#pragma omp parallel for
-
-	for (int l = 0; l < L_max + 1; l++) {
-		rho_f[l] = rho[l][1];
-		v_z_f[l] = v_z[l][1];
-    	v_r_f[l] = -v_r[l][1];
-		v_phi_f[l] = -v_phi[l][1];
-		H_phi_f[l] = -H_phi[l][1];
-		H_z_f[l] = H_z[l][1];
-		H_r_f[l] = -H_r[l][1];
-			
-		e_f[l] = e[l][1];
-		p_f[l] = p[l][1];
-		P_f[l] = P[l][1];
-
-		v_y_f[l] = -v_y[l][1];
-		H_y_f[l] = -H_y[l][1];
-	}
-
 	// filling meshes for u
 
 	#pragma omp parallel for collapse(2)
@@ -398,22 +344,26 @@ int main(int argc, char* argv[]) {
 		u0_8[l][0] = 0;
 	}
 
-	#pragma omp parallel for
-
-	for (int l = 0; l < L_max + 1; l++) {
-		u0_f_1[l] = rho_f[l] * r_f[l] * R[l];
-		u0_f_2[l] = rho_f[l] * v_z_f[l] * r_f[l] * R[l];
-		u0_f_3[l] = rho_f[l] * v_r_f[l] * r_f[l] * R[l];
-		u0_f_4[l] = rho_f[l] * v_phi_f[l] * r_f[l] * R[l];
-		u0_f_5[l] = rho_f[l] * e_f[l] * r_f[l] * R[l];
-		u0_f_6[l] = H_phi_f[l] * R[l];
-		u0_f_7[l] = H_z_f[l] * r_f[l] * R[l];
-		u0_f_8[l] = H_y_f[l] * r_f[l];
+	for (int l = L_end + 1; l < L_max + 1; l++) {
+		u0_1[l][0] = u0_1[l][1];
+		u0_2[l][0] = u0_2[l][1];
+		u0_3[l][0] = 0;
+		u0_4[l][0] = 0;
+		u0_5[l][0] = u0_5[l][1];
+		u0_6[l][0] = 0;
+		u0_7[l][0] = u0_7[l][1];
+		u0_8[l][0] = 0;
 	}
 
 	// start count time
 
 	begin = omp_get_wtime();
+
+    printf("u_1   %lf   %lf   %lf   %lf\n", u0_1[50][3], u0_1[50][2], u0_1[50][1], u0_1[50][0]);
+    printf("u_2   %lf   %lf   %lf   %lf\n", u0_2[50][3], u0_2[50][2], u0_2[50][1], u0_2[50][0]);
+    printf("u_5   %lf   %lf   %lf   %lf\n", u0_5[50][3], u0_5[50][2], u0_5[50][1], u0_5[50][0]);
+    printf("u_7   %lf   %lf   %lf   %lf\n", u0_7[50][3], u0_7[50][2], u0_7[50][1], u0_7[50][0]);
+	printf("\n");
 
 	// start time
 
@@ -430,6 +380,14 @@ int main(int argc, char* argv[]) {
 							dt * (0 - 
 								  (u0_1[l + 1][m] * v_z[l + 1][m] - u0_1[l - 1][m] * v_z[l - 1][m]) / (2 * dz) - 
 								  (u0_1[l][m + 1] * v_y[l][m + 1] - u0_1[l][m - 1] * v_y[l][m - 1]) / (2 * dy * R[l]));
+
+				if (l == 50 && m == 1) {
+				
+					//printf("dfghjkl %lf\n", u0_1[l][m] + 0.25 * (u0_1[l + 1][m] - 2 * u0_1[l][m] + u0_1[l - 1][m]) +
+					//					 0.25 * (u0_1[l][m + 1] - 2 * u0_1[l][m] + u0_1[l][m - 1]));
+
+					//printf("qwerty %lf   %lf\n", u_1[l][m - 1], u_1[l][m + 1]);
+				}
 
 				u_2[l][m] = u0_2[l][m] + 0.25 * (u0_2[l + 1][m] - 2 * u0_2[l][m] + u0_2[l - 1][m]) +
 										 0.25 * (u0_2[l][m + 1] - 2 * u0_2[l][m] + u0_2[l][m - 1]) +
@@ -494,6 +452,91 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
+		#pragma omp parallel for collapse(2)
+
+        for (int l = L_end + 1; l < L_max; l++) {
+			for (int m = 1; m < M_max; m++) {
+				if (m == 1) {
+
+				u_1[l][m] = u0_1[l][m] + 0.25 * (u0_1[l + 1][m] - 2 * u0_1[l][m] + u0_1[l - 1][m]) +
+										 0.25 * (u0_1[l][m + 1] - 2 * u0_1[l][m] + 0) +
+							dt * (0 - 
+								  (u0_1[l + 1][m] * v_z[l + 1][m] - u0_1[l - 1][m] * v_z[l - 1][m]) / (2 * dz) - 
+								  (u0_1[l][m + 1] * v_y[l][m + 1] - 0 * v_y[l][m - 1]) / (2 * dy * R[l]));
+
+				if (l == 50 && m == 1) {
+				
+					//printf("dfghjkl %lf\n", u0_1[l][m] + 0.25 * (u0_1[l + 1][m] - 2 * u0_1[l][m] + u0_1[l - 1][m]) +
+										 //0.25 * (u0_1[l][m + 1] - 2 * u0_1[l][m] + u0_1[l][m - 1]));
+
+					//printf("qwerty %lf   %lf\n", u_1[l][m - 1], u_1[l][m + 1]);
+				}
+
+				u_2[l][m] = u0_2[l][m] + 0.25 * (u0_2[l + 1][m] - 2 * u0_2[l][m] + u0_2[l - 1][m]) +
+										 0.25 * (u0_2[l][m + 1] - 2 * u0_2[l][m] + 0) +
+							dt * (-((P[l + 1][m] - pow(H_z[l + 1][m], 2)) * r[l + 1][m] * R[l + 1] - 
+									(P[l - 1][m] - pow(H_z[l - 1][m], 2)) * r[l - 1][m] * R[l - 1]) / (2 * dz) + 
+								  ((H_z[l][m + 1] * H_y[l][m + 1] + r_z[l][m + 1] * P[l][m + 1]) * r[l][m + 1] - 
+								   (H_z[l][m - 1] * H_y[l][m - 1] + r_z[l][m - 1] * P[l][m - 1]) * r[l][m - 1]) / (2 * dy) - 
+								  (u0_2[l + 1][m] * v_z[l + 1][m] - u0_2[l - 1][m] * v_z[l - 1][m]) / (2 * dz) - 
+								  (u0_2[l][m + 1] * v_y[l][m + 1] - 0 * v_y[l][m - 1]) / (2 * dy * R[l]));
+
+				u_3[l][m] = u0_3[l][m] + 0.25 * (u0_3[l + 1][m] - 2 * u0_3[l][m] + u0_3[l - 1][m]) +
+										 0.25 * (u0_3[l][m + 1] - 2 * u0_3[l][m] + 0) +
+							dt * ((rho[l][m] * pow(v_phi[l][m], 2) + P[l][m] - pow(H_phi[l][m], 2)) * R[l] + 
+								  (H_z[l + 1][m] * H_r[l + 1][m] * r[l + 1][m] * R[l + 1] - 
+								   H_z[l - 1][m] * H_r[l - 1][m] * r[l - 1][m] * R[l - 1]) / (2 * dz) - 
+								  ((P[l][m + 1] - H_r[l][m + 1] * H_y[l][m + 1]) * r[l][m + 1] - 
+								   (P[l][m - 1] - H_r[l][m - 1] * H_y[l][m - 1]) * r[l][m - 1]) / (2 * dy) - 
+								  (u0_3[l + 1][m] * v_z[l + 1][m] - u0_3[l - 1][m] * v_z[l - 1][m]) / (2 * dz) - 
+								  (u0_3[l][m + 1] * v_y[l][m + 1] - 0 * v_y[l][m - 1]) / (2 * dy * R[l]));
+
+				u_4[l][m] = u0_4[l][m] + 0.25 * (u0_4[l + 1][m] - 2 * u0_4[l][m] + u0_4[l - 1][m]) +
+										 0.25 * (u0_4[l][m + 1] - 2 * u0_4[l][m] + 0) +
+							dt * ((-rho[l][m] * v_r[l][m] * v_phi[l][m] + H_phi[l][m] * H_r[l][m]) * R[l] + 
+								  (H_phi[l + 1][m] * H_z[l + 1][m] * r[l + 1][m] * R[l + 1] - 
+								   H_phi[l - 1][m] * H_z[l - 1][m] * r[l - 1][m] * R[l - 1]) / (2 * dz) + 
+								  (H_phi[l][m + 1] * H_y[l][m + 1] * r[l][m + 1] - 
+								   H_phi[l][m - 1] * H_y[l][m - 1] * r[l][m - 1]) / (2 * dy) - 
+								  (u0_4[l + 1][m] * v_z[l + 1][m] - u0_4[l - 1][m] * v_z[l - 1][m]) / (2 * dz) - 
+								  (u0_4[l][m + 1] * v_y[l][m + 1] - 0 * v_y[l][m - 1]) / (2 * dy * R[l]));
+
+				u_5[l][m] = u0_5[l][m] + 0.25 * (u0_5[l + 1][m] - 2 * u0_5[l][m] + u0_5[l - 1][m]) +
+										 0.25 * (u0_5[l][m + 1] - 2 * u0_5[l][m] + 0) +
+							dt * (-p[l][m] * ((v_z[l + 1][m] * r[l + 1][m] * R[l + 1] -
+											   v_z[l - 1][m] * r[l - 1][m] * R[l - 1]) / (2 * dz) + 
+											  (v_y[l][m + 1] * r[l][m + 1] - 
+											   v_y[l][m - 1] * r[l][m - 1]) / (2 * dy)) - 
+								  (u0_5[l + 1][m] * v_z[l + 1][m] - u0_5[l - 1][m] * v_z[l - 1][m]) / (2 * dz) - 
+								  (u0_5[l][m + 1] * v_y[l][m + 1] - 0 * v_y[l][m - 1]) / (2 * dy * R[l]));
+
+				u_6[l][m] = u0_6[l][m] + 0.25 * (u0_6[l + 1][m] - 2 * u0_6[l][m] + u0_6[l - 1][m]) +
+										 0.25 * (u0_6[l][m + 1] - 2 * u0_6[l][m] + 0) +
+							dt * ((H_z[l + 1][m] * v_phi[l + 1][m] * R[l + 1] - 
+								   H_z[l - 1][m] * v_phi[l - 1][m] * R[l - 1]) / (2 * dz) + 
+								  (H_y[l][m + 1] * v_phi[l][m + 1] - 
+								   H_y[l][m - 1] * v_phi[l][m - 1]) / (2 * dy) - 
+								  (u0_6[l + 1][m] * v_z[l + 1][m] - u0_6[l - 1][m] * v_z[l - 1][m]) / (2 * dz) - 
+								  (u0_6[l][m + 1] * v_y[l][m + 1] - 0 * v_y[l][m - 1]) / (2 * dy * R[l]));
+
+				u_7[l][m] = u0_7[l][m] + 0.25 * (u0_7[l + 1][m] - 2 * u0_7[l][m] + u0_7[l - 1][m]) +
+										 0.25 * (u0_7[l][m + 1] - 2 * u0_7[l][m] + 0) +
+							dt * ((H_y[l][m + 1] * v_z[l][m + 1] * r[l][m + 1] - 
+								   H_y[l][m - 1] * v_z[l][m - 1] * r[l][m - 1]) / (2 * dy) - 
+								  (u0_7[l][m + 1] * v_y[l][m + 1] - 0 * v_y[l][m - 1]) / (2 * dy * R[l]));
+
+
+				u_8[l][m] = u0_8[l][m] + 0.25 * (u0_8[l + 1][m] - 2 * u0_8[l][m] + u0_8[l - 1][m]) +
+										 0.25 * (u0_8[l][m + 1] - 2 * u0_8[l][m] + 0) +
+							dt * ((H_z[l + 1][m] * v_y[l + 1][m] * r[l + 1][m] - 
+								   H_z[l - 1][m] * v_y[l - 1][m] * r[l - 1][m]) / (2 * dz) - 
+								  (u0_8[l + 1][m] * v_z[l + 1][m] - u0_8[l - 1][m] * v_z[l - 1][m]) / (2 * dz));
+				}
+			}
+		}
+
+		printf("rhohj %lf   %lf   %lf\n", u_1[38][0], u_1[39][0], u_1[40][0]);
+
 		// update central part
 
 		#pragma omp parallel for collapse(2)
@@ -515,27 +558,6 @@ int main(int argc, char* argv[]) {
 				p[l][m] = (gamma - 1) * rho[l][m] * e[l][m];
 				P[l][m] = p[l][m] + 1.0 / 2.0 * (pow(H_z[l][m], 2) + pow(H_r[l][m], 2) + pow(H_phi[l][m], 2));
 			}
-		}
-
-		// update fictitious cells
-
-		#pragma omp parallel for
-////////////////////////////////////////////////////// ???????????????????????????????????????????????????????????????????????????
-		for (int l = 0; l < L_max + 1; l++) {
-			rho_f[l] = rho[l][1];
-			v_z_f[l] = v_z[l][1];
-    		v_r_f[l] = -v_r[l][1]; // +
-			v_phi_f[l] = -v_phi[l][1]; // +
-			H_phi_f[l] = -H_phi[l][1]; // +
-			H_z_f[l] = H_z[l][1];
-			H_r_f[l] = -H_r[l][1]; // +
-			
-			e_f[l] = e[l][1];
-			p_f[l] = p[l][1];
-			P_f[l] = P[l][1];
-
-			v_y_f[l] = -v_y[l][1];
-			H_y_f[l] = -H_y[l][1];
 		}
 
 		// left boundary condition
@@ -636,15 +658,25 @@ int main(int argc, char* argv[]) {
 						dt / R[l] * (0 - 
 									 (rho[l + 1][0] * R[l + 1] * v_z[l + 1][0] * R[l + 1] - 
 									  rho[l - 1][0] * R[l - 1] * v_z[l - 1][0] * R[l - 1]) / (2 * dz) - 
-									 (4 * rho[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l]));
+									 (2 * rho[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l]));
+
+			if (l == 39) {
+			printf("qwerty %lf\n", dt / R[l] * (0 - 
+									 (rho[l + 1][0] * R[l + 1] * v_z[l + 1][0] * R[l + 1] - 
+									  rho[l - 1][0] * R[l - 1] * v_z[l - 1][0] * R[l - 1]) / (2 * dz) - 
+									 (2 * rho[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l])));
+			
+
+			printf("qwertyyyyyyyyy %lf\n", rho[l][0] * R[l]);
+			}
 
 			u_2[l][0] = rho[l][0] * v_z[l][0] * R[l] + 
 						dt / R[l] * (-((P[l + 1][0] - pow(H_z[l + 1][0], 2)) * R[l + 1] * R[l + 1] - 
 									   (P[l - 1][0] - pow(H_z[l - 1][0], 2)) * R[l - 1] * R[l - 1]) / (2 * dz) + 
-									 (4 * H_z[l][1] * H_y[l][1] + r_z[l][1] * P[l][1] * R[l]) / (2 * dy) - 
+									 (2 * H_z[l][1] * H_y[l][1] + r_z[l][1] * P[l][1] * R[l]) / (2 * dy) - 
 						  	   		 (rho[l + 1][0] * v_z[l + 1][0] * R[l + 1] * v_z[l + 1][0] * R[l + 1] - 
 									  rho[l - 1][0] * v_z[l - 1][0] * R[l - 1] * v_z[l - 1][0] * R[l - 1]) / (2 * dz) - 
-							   		 (4 * rho[l][1] * v_z[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l]));
+							   		 (2 * rho[l][1] * v_z[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l]));
 
 			u_3[l][0] = 0;
 
@@ -656,18 +688,40 @@ int main(int argc, char* argv[]) {
 										  				(4 * v_y[l][1] * R[l]) / (2 * dy)) - 
 							  		 (rho[l + 1][0] * e[l + 1][0] * R[l + 1] * v_z[l + 1][0] * R[l + 1] - 
 									  rho[l - 1][0] * e[l - 1][0] * R[l - 1] * v_z[l - 1][0] * R[l - 1]) / (2 * dz) - 
-							  		 (4 * rho[l][1] * e[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l]));
+							  		 (2 * rho[l][1] * e[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l]));
 
 			u_6[l][0] = 0;
 
 			u_7[l][0] = H_z[l][0] * R[l] +
-						dt / R[l] * ((4 * H_y[l][1] * v_z[l][1] * r[l][1] * R[l]) / (2 * dy) - 
-							  		 (4 * H_z[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l]));
+						dt / R[l] * ((2 * H_y[l][1] * v_z[l][1] * r[l][1] * R[l]) / (2 * dy) - 
+							  		 (2 * H_z[l][1] * R[l] * v_y[l][1] * R[l]) / (2 * dy * R[l]));
 
 
 			u_8[l][0] = 0;
 
 		}
+
+        #pragma omp parallel for
+
+        for (int l = L_end + 1; l < L_max; l++) {
+
+			//u_1[l][0] = u_1[l][0] * r[l][1];
+            //u_2[l][0] = u_2[l][0] * r[l][1];
+            //u_5[l][0] = u_5[l][0] * r[l][1];
+            //u_7[l][0] = u_7[l][0] * r[l][1];
+
+		}
+
+        printf("u_1   %lf   %lf   %lf   %lf\n", u_1[50][3], u_1[50][2], u_1[50][1], u_1[50][0]);
+        printf("u_2   %lf   %lf   %lf   %lf\n", u_2[50][3], u_2[50][2], u_2[50][1], u_2[50][0]);
+        printf("u_5   %lf   %lf   %lf   %lf\n", u_5[50][3], u_5[50][2], u_5[50][1], u_5[50][0]);
+        printf("u_7   %lf   %lf   %lf   %lf\n", u_7[50][3], u_7[50][2], u_7[50][1], u_7[50][0]);
+		printf("\n");
+
+		printf("\n");
+		printf("\n");
+		printf("rhooooooooo   %lf   %lf   %lf   %lf\n", rho[37][0], rho[38][0], rho[39][0], rho[40][0]);
+		printf("\n");
 
 		// right boundary condition
 
@@ -749,24 +803,8 @@ int main(int argc, char* argv[]) {
 			P[l][0] = p[l][0] + 1.0 / 2.0 * (pow(H_z[l][0], 2) + pow(H_r[l][0], 2) + pow(H_phi[l][0], 2));
 		}
 
-		#pragma omp parallel for
-////////////////////////////////////////////////////// ???????????????????????????????????????????????????????????????????????????
-		for (int l = 0; l < L_max + 1; l++) {
-			rho_f[l] = rho[l][1];
-			v_z_f[l] = v_z[l][1];
-    		v_r_f[l] = -v_r[l][1]; // +
-			v_phi_f[l] = -v_phi[l][1]; // +
-			H_phi_f[l] = -H_phi[l][1]; // +
-			H_z_f[l] = H_z[l][1];
-			H_r_f[l] = -H_r[l][1]; // +
-			
-			e_f[l] = e[l][1];
-			p_f[l] = p[l][1];
-			P_f[l] = P[l][1];
-
-			v_y_f[l] = -v_y[l][1];
-			H_y_f[l] = -H_y[l][1];
-		}
+		printf("rho   %lf   %lf   %lf   %lf\n", rho[50][3], rho[50][2], rho[50][1], rho[50][0]);
+		printf("\n");
 
 		#pragma omp parallel for collapse(2)
 
@@ -783,19 +821,6 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		#pragma omp parallel for
-
-		for (int l = 0; l < L_max + 1; l++) {
-			u0_f_1[l] = rho_f[l] * r_f[l] * R[l];
-			u0_f_2[l] = rho_f[l] * v_z_f[l] * r_f[l] * R[l];
-			u0_f_3[l] = rho_f[l] * v_r_f[l] * r_f[l] * R[l];
-			u0_f_4[l] = rho_f[l] * v_phi_f[l] * r_f[l] * R[l];
-			u0_f_5[l] = rho_f[l] * e_f[l] * r_f[l] * R[l];
-			u0_f_6[l] = H_phi_f[l] * R[l];
-			u0_f_7[l] = H_z_f[l] * r_f[l] * R[l];
-			u0_f_8[l] = H_y_f[l] * r_f[l];
-		}
-
 		// animation output
 
 		if ((int)(t * 10000) % 1000 == 0 && animate == 1) {
@@ -808,7 +833,7 @@ int main(int argc, char* argv[]) {
 
 		// checkout
 
-		printf("%lf		%lf		%lf		%lf		%lf		%lf\n", t, rho[20][40], v_z[20][40], v_phi[20][40], e[20][40], H_phi[20][40]);
+		//printf("%lf		%lf		%lf		%lf		%lf		%lf\n", t, rho[20][40], v_z[20][40], v_phi[20][40], e[20][40], H_phi[20][40]);
 
 		for (int l = 0; l < L_max + 1; l++) {
 			if (rho[l][1] > 2 || v_z[l][1] > 2 || v_phi[l][1] > 2 || H_phi[l][1] > 2) {
@@ -829,7 +854,7 @@ int main(int argc, char* argv[]) {
 
 	// output results in file
 
-	std :: ofstream out("23-2D_MHD_short_old.plt");
+	std :: ofstream out("23-2D_MHD_short_new.plt");
 	int np = (L_max + 1) * (M_max + 1);
 	int ne = L_max * M_max;
 	double hfr;
@@ -882,15 +907,6 @@ int main(int argc, char* argv[]) {
 	memory_clearing_2D(u0_7, L_max + 1);
 	memory_clearing_2D(u0_8, L_max + 1);
 
-	delete [] u0_f_1;
-	delete [] u0_f_2;
-	delete [] u0_f_3;
-	delete [] u0_f_4;
-	delete [] u0_f_5;
-	delete [] u0_f_6;
-	delete [] u0_f_7;
-	delete [] u0_f_8;
-
 	memory_clearing_2D(rho, L_max + 1);
 	memory_clearing_2D(v_r, L_max + 1);
 	memory_clearing_2D(v_phi, L_max + 1);
@@ -902,29 +918,12 @@ int main(int argc, char* argv[]) {
 	memory_clearing_2D(H_phi, L_max + 1);
 	memory_clearing_2D(H_z, L_max + 1);
 
-	delete [] rho_f;
-	delete [] v_r_f;
-	delete [] v_phi_f;
-	delete [] v_z_f;
-	delete [] e_f;
-	delete [] p_f;
-	delete [] P_f;
-	delete [] H_r_f;
-	delete [] H_phi_f;
-	delete [] H_z_f;
-
 	memory_clearing_2D(r, L_max + 1);
 	memory_clearing_2D(r_z, L_max + 1);
 	delete [] R;
 
-	delete [] r_f;
-	delete [] r_z_f;
-
 	memory_clearing_2D(v_y, L_max + 1);
 	memory_clearing_2D(H_y, L_max + 1);
-
-	delete [] v_y_f;
-	delete [] H_y_f;
 	
 	return 0;
 }
